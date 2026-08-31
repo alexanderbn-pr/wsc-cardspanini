@@ -7,10 +7,9 @@ import { errorHandler } from './middlewares/errorHandler';
 import healthRouter from './routes/health';
 
 // Load environment variables first
-loadEnv();
+const env = loadEnv();
 
 const app = express();
-const env = getEnv();
 
 // Initialize database
 initDatabase();
