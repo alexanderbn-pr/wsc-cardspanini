@@ -1,5 +1,5 @@
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
-import { getEnv } from './env';
+/*import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { getEnv } from '../';
 
 let supabase: SupabaseClient;
 
@@ -22,4 +22,4 @@ export function getDatabase(): SupabaseClient {
     throw new Error('Database not initialized. Call initDatabase() first.');
   }
   return supabase;
-}
+}*/

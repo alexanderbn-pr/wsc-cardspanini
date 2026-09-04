@@ -1,35 +1,43 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
-import { loadEnv } from './config/env';
-import { initDatabase } from './config/database';
-import { errorHandler } from './middlewares/errorHandler';
-import healthRouter from './routes/health';
+import { ACCEPTED_ORIGINS } from "@/config/config.js";
 
+//import { initDatabase } from './config/database';
+import { errorHandler } from '@/middlewares/errorHandler.js';
+import { corsMiddleware } from '@/middlewares/cors.js';
+import healthRouter from '@/routes/health.js';
+import stickersRouter from '@/routes/stickers.js';
+import teamsRouter from '@/routes/teams.js';
 // Load environment variables first
-const env = loadEnv();
 
+const PORT = process.env.PORT ?? 1234;
 const app = express();
 
 // Initialize database
-initDatabase();
+// initDatabase();
 
-// Middleware
-app.use(cors());
+// -- MIDDLEWARES --
+// Con el cors se puede dividir entre produccion y desarrollo para aplicar ACCEPTED_ORIGINS o solo permitir todo localhost en desarrollo.
+app.use(corsMiddleware());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/api', healthRouter);
+app.use('/stickers', stickersRouter);
+app.use('/teams', teamsRouter);
 
 // Error handling (must be last)
 app.use(errorHandler);
 
 // Start server
-app.listen(env.PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${env.PORT}`);
-  console.log(`📊 Environment: ${env.NODE_ENV}`);
-  console.log(`💾 Supabase: ${env.SUPABASE_URL}`);
-});
+if(process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running on http://localhost:${PORT}`);
+    console.log(`📊 Environment: ${process.env.NODE_ENV}`);
+    console.log(`💾 Supabase: ${process.env.SUPABASE_URL}`);
+  });
+}
 
 export default app;
