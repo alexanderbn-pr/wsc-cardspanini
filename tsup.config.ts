@@ -1,7 +1,7 @@
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
-  entry: ['src/index.ts'],
+  entry: ['src/app.ts'],
   format: ['esm'],
   target: 'node20',
   outDir: 'dist',
@@ -9,7 +9,4 @@ export default defineConfig({
   splitting: false,
   sourcemap: true,
   minify: false,
-  // Don't bundle node_modules
-  noExternal: [],
-  // Bundle everything else (resolves @/ aliases)
 });

@@ -1,9 +1,5 @@
 {
   "buildCommand": "npm run build",
   "installCommand": "npm install",
-  "functions": {
-    "api/index.mjs": {
-      "includeFiles": "dist/**"
-    }
-  }
+  "framework": null
 }
