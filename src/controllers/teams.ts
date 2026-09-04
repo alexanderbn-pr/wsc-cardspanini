@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import {TeamsModel} from "@/models/teams.js";
+import {TeamsModel} from "../models/teams.js";
 
 export class TeamController {
     // Las funciones son staticas para no tener que hacer un new cada vez que se llame a la funcion del controller

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { DEFAULTS } from "@/config/config.js";
-import { TeamsModel } from "@/models/teams.js";
+import { DEFAULTS } from "../config/config.js";
+import { TeamsModel } from "../models/teams.js";
 export class StickerController {
     static async getId(req: Request, res: Response) {
        const { id } = req.params;

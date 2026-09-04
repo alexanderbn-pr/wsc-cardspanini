@@ -1,4 +1,4 @@
-import teams from "@/data/teams.json" with { type: "json" };
+import teams from "../data/teams.json" with { type: "json" };
 
 export class TeamsModel {
     static async getAll() {

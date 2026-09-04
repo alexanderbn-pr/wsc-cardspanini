@@ -1,9 +1,9 @@
 import express from 'express';
-import { errorHandler } from '@/middlewares/errorHandler.js';
-import { corsMiddleware } from '@/middlewares/cors.js';
-import healthRouter from '@/routes/health.js';
-import stickersRouter from '@/routes/stickers.js';
-import teamsRouter from '@/routes/teams.js';
+import { errorHandler } from './middlewares/errorHandler.js';
+import { corsMiddleware } from './middlewares/cors.js';
+import healthRouter from './routes/health.js';
+import stickersRouter from './routes/stickers.js';
+import teamsRouter from './routes/teams.js';
 
 const app = express();
 
