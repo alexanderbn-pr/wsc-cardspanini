@@ -1,11 +1,9 @@
 {
   "buildCommand": "npm run build",
   "installCommand": "npm install",
-  "framework": null,
   "functions": {
-    "dist/index.js": {
-      "runtime": "@vercel/node@3",
-      "maxDuration": 30
+    "api/index.ts": {
+      "includeFiles": "dist/**"
     }
   }
 }
