@@ -1,0 +1,12 @@
+// sticker.prisma
+
+model Team {
+  id       Int       @id @default(autoincrement())
+  name     String
+  number   String;
+  position String;
+  check    Boolean;
+  quantity Int;
+  teamId   Int
+  team     Team   @relation(fields: [teamId], references: [id])
+}

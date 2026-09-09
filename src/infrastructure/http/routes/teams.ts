@@ -1,18 +1,12 @@
 import { Router } from 'express';
 import { TeamController } from '../controllers/teams.controller.js';
+import { asyncHandler } from '../middlewares/asyncHandler.js';
 
-/**
- * Creates and configures the teams router.
- * Factory pattern: accepts controller instance for dependency injection.
- *
- * @param controller - TeamController instance
- * @returns Configured Express Router
- */
 export default function createTeamsRouter(controller: TeamController): Router {
     const router = Router();
 
-    router.get("/", controller.getAll);
-    router.get("/:id", controller.getId);
+    router.get("/", asyncHandler(controller.getAll));
+    router.get("/:id", asyncHandler(controller.getId));
 
     return router;
 }

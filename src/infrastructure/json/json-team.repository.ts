@@ -13,6 +13,7 @@ interface RawTeam {
 }
 
 interface RawSticker {
+    id: number;
     number: string;
     name: string;
     position: string;
@@ -71,6 +72,7 @@ export class JsonTeamRepository implements TeamRepository {
      */
     private mapSticker(raw: RawSticker): Sticker {
         return {
+            id: raw.id,
             number: raw.number,
             name: raw.name,
             position: raw.position,

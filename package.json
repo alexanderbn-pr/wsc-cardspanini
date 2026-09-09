@@ -6,18 +6,21 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/index.ts",
+    "dev:debug": "node --inspect-brk node_modules/.bin/tsx watch src/index.ts",
     "build": "tsup",
     "start": "node dist/index.js",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "lint": "eslint src/",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "postinstall": "prisma skills sync || exit 0"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@prisma/client": "^7.10.0",
     "@supabase/supabase-js": "^2.49.1",
     "better-sqlite3": "^13.0.3",
     "cors": "^2.8.6",
@@ -27,6 +30,8 @@
     "pdf-parse": "^2.4.5",
     "pdf-table-extractor": "^1.0.3",
     "pdf2json": "^4.0.3",
+    "prisma": "^8.0.0-rc.13",
+    "ws": "^8.21.3",
     "zod": "^3.24.2"
   },
   "devDependencies": {
@@ -35,6 +40,7 @@
     "@types/express": "^5.0.0",
     "@types/node": "^22.13.5",
     "@types/supertest": "^6.0.2",
+    "@types/ws": "^8.18.1",
     "supertest": "^7.0.0",
     "tsc-alias": "^1.9.4",
     "tsup": "^8.5.1",

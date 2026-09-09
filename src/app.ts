@@ -1,11 +1,18 @@
+// Polyfill WebSocket for Node.js < 22 (Supabase requirement)
+import './config/websocket-polyfill.js';
+
 import express from 'express';
+import { loadEnv } from './config/env.js';
 import { errorHandler } from './infrastructure/http/middlewares/errorHandler.js';
 import { corsMiddleware } from './infrastructure/http/middlewares/cors.js';
 import healthRouter from './infrastructure/http/routes/health.js';
 
-// Infrastructure
-import { JsonTeamRepository } from './infrastructure/json/json-team.repository.js';
+// Load env BEFORE any adapter that needs it
+loadEnv();
 
+// Infrastructure
+//import { JsonTeamRepository } from './infrastructure/json/json-team.repository.js';
+import { SupabaseTeamRepository } from "./infrastructure/supabase/team.repository.js";
 // Services
 import { TeamService } from './services/team.service.js';
 
@@ -26,7 +33,8 @@ app.use(express.urlencoded({ extended: true }));
 
 // -- DEPENDENCY INJECTION (Composition Root) --
 // Infrastructure adapters
-const teamRepository = new JsonTeamRepository();
+//const teamRepository = new JsonTeamRepository();
+const teamRepository = new SupabaseTeamRepository();
 // Application services
 const teamService = new TeamService(teamRepository);
 // Controllers
