@@ -13,8 +13,10 @@ loadEnv();
 // Infrastructure
 //import { JsonTeamRepository } from './infrastructure/json/json-team.repository.js';
 import { SupabaseTeamRepository } from "./infrastructure/supabase/team.repository.js";
+import { SupabaseStickerRepository } from "./infrastructure/supabase/sticker.repository.js";
 // Services
 import { TeamService } from './services/team.service.js';
+import { StickerService } from './services/sticker.service.js';
 
 // Controllers
 import { TeamController } from './infrastructure/http/controllers/teams.controller.js';
@@ -35,11 +37,13 @@ app.use(express.urlencoded({ extended: true }));
 // Infrastructure adapters
 //const teamRepository = new JsonTeamRepository();
 const teamRepository = new SupabaseTeamRepository();
+const stickerRepository = new SupabaseStickerRepository();
 // Application services
 const teamService = new TeamService(teamRepository);
+const stickerService = new StickerService(stickerRepository, teamRepository);
 // Controllers
 const teamController = new TeamController(teamService);
-const stickerController = new StickerController(teamService);
+const stickerController = new StickerController(stickerService);
 
 // Routes (factory pattern)
 const stickersRouter = createStickersRouter(stickerController);

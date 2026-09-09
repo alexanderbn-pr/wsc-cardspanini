@@ -1,4 +1,3 @@
-
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import { Team } from "../../domain/entities/Team.js";
 import { Sticker } from "../../domain/entities/Sticker.js";
@@ -20,6 +19,10 @@ interface SupabaseTeamRow {
   name: string;
 }
 
+/**
+ * Supabase-based implementation of TeamRepository.
+ * Handles ONLY team operations.
+ */
 export class SupabaseTeamRepository implements TeamRepository {
   private client: SupabaseClient;
 
@@ -29,11 +32,11 @@ export class SupabaseTeamRepository implements TeamRepository {
   }
 
   async getAll(): Promise<Team[]> {
-    // 1. Fetch all teams
     const { data: teams, error: teamsError } = await this.client
       .from("Teams")
       .select("*")
       .order("id", { ascending: true });
+
     if (teamsError) {
       throw new Error(`Failed to fetch teams: ${teamsError.message}`);
     }
@@ -42,7 +45,6 @@ export class SupabaseTeamRepository implements TeamRepository {
       return [];
     }
 
-    // 2. Fetch all stickers in one query
     const { data: stickers, error: stickersError } = await this.client
       .from("Stickers")
       .select("*")
@@ -52,7 +54,6 @@ export class SupabaseTeamRepository implements TeamRepository {
       throw new Error(`Failed to fetch stickers: ${stickersError.message}`);
     }
 
-    // 3. Group stickers by idTeam and map to domain entities
     const stickersByTeam = this.groupStickersByTeam(stickers ?? []);
 
     return teams.map((team: SupabaseTeamRow) => ({
@@ -63,7 +64,6 @@ export class SupabaseTeamRepository implements TeamRepository {
   }
 
   async getById(id: number): Promise<Team | undefined> {
-    // Fetch single team
     const { data: team, error: teamError } = await this.client
       .from("Teams")
       .select("*")
@@ -71,11 +71,10 @@ export class SupabaseTeamRepository implements TeamRepository {
       .single();
 
     if (teamError) {
-      if (teamError.code === "PGRST116") return undefined; // Not found
+      if (teamError.code === "PGRST116") return undefined;
       throw new Error(`Failed to fetch team: ${teamError.message}`);
     }
 
-    // Fetch stickers for this team
     const { data: stickers, error: stickersError } = await this.client
       .from("Stickers")
       .select("*")
@@ -93,33 +92,14 @@ export class SupabaseTeamRepository implements TeamRepository {
     };
   }
 
-  async create(sticker: Sticker, id: number): Promise<Team | undefined> {
-    // Insert the sticker with the team reference
-    const { error } = await this.client.from("Stickers").insert({
-      name: sticker.name,
-      number: sticker.number,
-      position: sticker.position,
-      check: sticker.check,
-      quantity: sticker.quantity,
-      idTeam: id,
-    });
-
-    if (error) {
-      throw new Error(`Failed to create sticker: ${error.message}`);
-    }
-
-    // Return the updated team
-    return this.getById(id);
-  }
-
   /**
-   * Groups sticker rows by idTeam and maps each to a domain Sticker.
+   * Shared helper: groups sticker rows by idTeam.
+   * Used by both getAll() and getById().
    */
   private groupStickersByTeam(
     stickers: SupabaseStickerRow[]
   ): Record<number, Sticker[]> {
     const grouped: Record<number, Sticker[]> = {};
-
     for (const row of stickers) {
       const teamId = row.idTeam;
       if (!grouped[teamId]) {
@@ -127,11 +107,9 @@ export class SupabaseTeamRepository implements TeamRepository {
       }
       grouped[teamId].push(this.mapSticker(row));
     }
-
     return grouped;
   }
 
- 
   private mapSticker(row: SupabaseStickerRow): Sticker {
     return {
       id: row.id,

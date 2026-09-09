@@ -46,12 +46,6 @@ export class JsonTeamRepository implements TeamRepository {
         return this.teams.find(t => t.id === id);
     }
 
-    async create(sticker: Sticker, id: number): Promise<Team | undefined> {
-        const team = this.teams.find(t => t.id === id)
-        team?.stickers.push(sticker)
-        return team;
-    }
-
     /**
      * Maps raw JSON teams to domain entities.
      * Handles field transformation and defaults.
