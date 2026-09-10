@@ -7,6 +7,9 @@ node_modules/
 dist/
 build/
 
+# Prisma (auto-generated from models/)
+prisma/schema.prisma
+
 # Environment
 .env
 .env.local

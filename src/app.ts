@@ -1,6 +1,3 @@
-// Polyfill WebSocket for Node.js < 22 (Supabase requirement)
-import './config/websocket-polyfill.js';
-
 import express from 'express';
 import { loadEnv } from './config/env.js';
 import { errorHandler } from './infrastructure/http/middlewares/errorHandler.js';
@@ -11,9 +8,16 @@ import healthRouter from './infrastructure/http/routes/health.js';
 loadEnv();
 
 // Infrastructure
+// Repository JSON
 //import { JsonTeamRepository } from './infrastructure/json/json-team.repository.js';
-import { SupabaseTeamRepository } from "./infrastructure/supabase/team.repository.js";
-import { SupabaseStickerRepository } from "./infrastructure/supabase/sticker.repository.js";
+// Repository Supabase
+//import { SupabaseTeamRepository } from "./infrastructure/supabase/team.repository.js";
+//import { SupabaseStickerRepository } from "./infrastructure/supabase/sticker.repository.js";
+// Repository Prisma
+import { PrismaTeamRepository } from "./infrastructure/prisma/team.repository.js";
+import { PrismaStickerRepository } from "./infrastructure/prisma/sticker.repository.js";
+
+
 // Services
 import { TeamService } from './services/team.service.js';
 import { StickerService } from './services/sticker.service.js';
@@ -36,8 +40,8 @@ app.use(express.urlencoded({ extended: true }));
 // -- DEPENDENCY INJECTION (Composition Root) --
 // Infrastructure adapters
 //const teamRepository = new JsonTeamRepository();
-const teamRepository = new SupabaseTeamRepository();
-const stickerRepository = new SupabaseStickerRepository();
+const teamRepository = new PrismaTeamRepository();
+const stickerRepository = new PrismaStickerRepository();
 // Application services
 const teamService = new TeamService(teamRepository);
 const stickerService = new StickerService(stickerRepository, teamRepository);

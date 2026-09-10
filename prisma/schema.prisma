@@ -1,0 +1,30 @@
+// Schema de prisma general, estructuracion y copia de las tablas de base de datos asi como su cliente
+// O bien se puede crear o autogeneral con el prisma:merge a partir de los modelos de la carpeta models
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Team {
+  id       Int       @id @default(autoincrement())
+  name     String
+  stickers Sticker[]
+
+  @@map("Teams")
+}
+model Sticker {
+  id       Int    @id @default(autoincrement())
+  name     String
+  number   String
+  position String
+  check    Boolean @default(false)
+  quantity Int     @default(0)
+  idTeam   Int
+  team     Team    @relation(fields: [idTeam], references: [id])
+
+  @@map("Stickers")
+}

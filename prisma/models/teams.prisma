@@ -1,7 +1,10 @@
-// team.prisma
+// "prisma:merge": "prisma-merge-schema -d prisma/models/base.prisma -d prisma/models/teams.prisma -d prisma/models/stickers.prisma -o prisma/schema.prisma",
+// npm run prisma:merge --> instruccion para fusionar los archivos .prisma en un schema.primsa para cuando tengamos muchas tablas
 
-model Sticker {
-  id     Int    @id @default(autoincrement())
-  name   String
-  stickers Stickers[]
+model Team {
+  id       Int       @id @default(autoincrement())
+  name     String
+  stickers Sticker[]
+
+  @@map("Teams")
 }

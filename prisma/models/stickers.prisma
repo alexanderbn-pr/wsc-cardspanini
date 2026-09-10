@@ -1,12 +1,12 @@
-// sticker.prisma
-
-model Team {
-  id       Int       @id @default(autoincrement())
+model Sticker {
+  id       Int    @id @default(autoincrement())
   name     String
-  number   String;
-  position String;
-  check    Boolean;
-  quantity Int;
-  teamId   Int
-  team     Team   @relation(fields: [teamId], references: [id])
+  number   String
+  position String
+  check    Boolean @default(false)
+  quantity Int     @default(0)
+  idTeam   Int
+  team     Team    @relation(fields: [idTeam], references: [id])
+
+  @@map("Stickers")
 }
