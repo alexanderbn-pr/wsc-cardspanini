@@ -1,4 +1,5 @@
 import { Sticker } from "../../domain/entities/Sticker.js";
+import { StickerFilters } from "../../modules/stickers.js"
 import { StickerRepository } from "../../domain/repositories/sticker.repository.js";
 import { prisma } from "../../config/prisma.js";
 
@@ -28,6 +29,25 @@ export class PrismaStickerRepository implements StickerRepository {
       },
     });
     return this.mapSticker(created);
+  }
+
+  async filterStickers(filters: StickerFilters) : Promise<Sticker[]>{
+    const skip = filters.page * filters.limit
+    const where: Record<string, any> = {};
+    if (filters.id !== undefined) where.id = filters.id;
+    if (filters.idTeam !== undefined) where.idTeam = filters.idTeam;
+    if (filters.number !== undefined) where.number = filters.number;
+    if (filters.name !== undefined) where.name = filters.name;
+    if (filters.position !== undefined) where.position = filters.position;
+    if (filters.check !== undefined) where.check = filters.check;
+    if (filters.quantity !== undefined) where.quantity = filters.quantity;
+    const stickers = await prisma.sticker.findMany({
+      where,
+      skip: skip,
+      take: filters.limit,
+      orderBy: { id: "asc" },
+    });
+    return stickers.map(this.mapSticker);
   }
 
   private mapSticker(row: any): Sticker {

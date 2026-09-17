@@ -1,3 +1,4 @@
+import { StickerFilters } from "src/modules/stickers.js";
 import { StickerRepository } from "../domain/repositories/sticker.repository.js";
 import { TeamRepository } from "../domain/repositories/team.repository.js";
 import { Sticker } from "../domain/entities/Sticker.js";
@@ -37,6 +38,11 @@ export class StickerService {
             : undefined;
 
         return stickers.slice(start, end);
+    }
+
+    async filterStickers(filters: StickerFilters): Promise<Sticker[]>{
+        const stickers = await this.stickerRepository.filterStickers(filters)
+        return stickers || [];
     }
 
     async create(sticker: Sticker, teamId: number): Promise<Sticker> {

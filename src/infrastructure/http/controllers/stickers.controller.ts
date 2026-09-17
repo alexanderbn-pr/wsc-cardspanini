@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { DEFAULTS } from "../../../config/config.js";
 import { StickerService } from "../../../services/sticker.service.js";
+import { stickerFiltersSchema } from "../schemes/FilterStickerSchema.js";
 
 export class StickerController {
     constructor(
@@ -16,6 +17,15 @@ export class StickerController {
             Number(limit),
             Number(offset)
         );
+        res.json(stickers);
+    }
+
+    filterStickers = async(req: Request, res: Response) => {
+        const parsed = stickerFiltersSchema.safeParse(req.query);
+        if (!parsed.success) {
+            return res.status(400).json({ errors: parsed.error.flatten().fieldErrors });
+        }
+        const stickers = await this.stickerService.filterStickers(parsed.data);
         res.json(stickers);
     }
 

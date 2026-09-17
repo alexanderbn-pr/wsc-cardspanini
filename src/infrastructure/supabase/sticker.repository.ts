@@ -1,5 +1,6 @@
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import { Sticker } from "../../domain/entities/Sticker.js";
+import { StickerFilters } from "../../modules/stickers.js";
 import { StickerRepository } from "../../domain/repositories/sticker.repository.js";
 import { getEnv } from "../../config/env.js";
 
@@ -58,6 +59,28 @@ export class SupabaseStickerRepository implements StickerRepository {
     }
 
     return this.mapSticker(data);
+  }
+
+  async filterStickers(filters: StickerFilters): Promise<Sticker[]> {
+    let query = this.client.from("Stickers").select("*");
+
+    if (filters.id !== undefined) query = query.eq("id", filters.id);
+    if (filters.idTeam !== undefined) query = query.eq("idTeam", filters.idTeam);
+    if (filters.number !== undefined) query = query.eq("number", filters.number);
+    if (filters.name !== undefined) query = query.eq("name", filters.name);
+    if (filters.position !== undefined) query = query.eq("position", filters.position);
+    if (filters.check !== undefined) query = query.eq("check", filters.check);
+    if (filters.quantity !== undefined) query = query.eq("quantity", filters.quantity);
+
+    query = query.order("id", { ascending: true });
+
+    const { data, error } = await query;
+
+    if (error) {
+      throw new Error(`Failed to filter stickers: ${error.message}`);
+    }
+
+    return (data ?? []).map(this.mapSticker);
   }
 
   private mapSticker(row: SupabaseStickerRow): Sticker {
