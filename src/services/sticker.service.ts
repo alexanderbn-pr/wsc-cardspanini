@@ -16,7 +16,7 @@ export class StickerService {
 
     async getByTeamId(
         teamId: number,
-        position?: string,
+        positionId?: number,
         limit?: number,
         offset?: number
     ): Promise<Sticker[]> {
@@ -32,11 +32,9 @@ export class StickerService {
             logger.debug({ teamId }, 'Cache hit — stickers loaded from Redis');
         }
 
-        if (position) {
+        if (positionId) {
             stickers = stickers.filter(
-                sticker =>
-                    sticker.position.toLowerCase() ===
-                    position.toLowerCase()
+                sticker => sticker.positionId === positionId
             );
         }
 

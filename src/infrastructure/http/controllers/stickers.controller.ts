@@ -10,10 +10,10 @@ export class StickerController {
 
     getId = async(req: Request, res: Response) => {
         const { id } = req.params;
-        const { limit = DEFAULTS.LIMIT_PAGINATION, offset = DEFAULTS.OFFSET_PAGINATION, position } = req.query;
+        const { limit = DEFAULTS.LIMIT_PAGINATION, offset = DEFAULTS.OFFSET_PAGINATION, positionId } = req.query;
         const stickers = await this.stickerService.getByTeamId(
             Number(id),
-            position as string,
+            Number(positionId),
             Number(limit),
             Number(offset)
         );

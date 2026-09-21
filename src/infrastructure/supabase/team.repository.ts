@@ -8,10 +8,11 @@ interface SupabaseStickerRow {
   id: number;
   name: string;
   number: string | null;
-  position: string | null;
+  positionId: number | null;
   check: boolean;
   quantity: number;
   idTeam: number;
+  Position?: { name: string } | null;
 }
 
 interface SupabaseTeamRow {
@@ -47,7 +48,7 @@ export class SupabaseTeamRepository implements TeamRepository {
 
     const { data: stickers, error: stickersError } = await this.client
       .from("Stickers")
-      .select("*")
+      .select("*, Position(name)")
       .order("id", { ascending: true });
 
     if (stickersError) {
@@ -77,7 +78,7 @@ export class SupabaseTeamRepository implements TeamRepository {
 
     const { data: stickers, error: stickersError } = await this.client
       .from("Stickers")
-      .select("*")
+      .select("*, Position(name)")
       .eq("idTeam", id)
       .order("id", { ascending: true });
 
@@ -115,7 +116,8 @@ export class SupabaseTeamRepository implements TeamRepository {
       id: row.id,
       number: row.number ?? "",
       name: row.name,
-      position: row.position ?? "",
+      positionId: row.positionId ?? 0,
+      position: row.Position?.name ?? "",
       check: row.check,
       quantity: row.quantity,
     };

@@ -14,7 +14,7 @@
     "test:coverage": "vitest run --coverage",
     "lint": "eslint src/",
     "typecheck": "tsc --noEmit",
-    "prisma:merge": "prisma-merge-schema -d prisma/models/base.prisma -d prisma/models/teams.prisma -d prisma/models/stickers.prisma -o prisma/schema.prisma",
+    "prisma:merge": "prisma-merge-schema -d prisma/models/base.prisma -d prisma/models/teams.prisma -d prisma/models/stickers.prisma -d prisma/models/positions.prisma -o prisma/schema.prisma",
     "prisma:generate": "npm run prisma:merge && npx prisma generate",
     "prisma:studio": "npm run prisma:merge && npx prisma studio",
     "postinstall": "prisma skills sync || exit 0"

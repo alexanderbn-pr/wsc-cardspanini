@@ -5,7 +5,7 @@ export const CreateStickerSchema = z.object({
     sticker: z.object({
         number: z.string(),
         name: z.string(),
-        position: z.string(),
+        positionId: z.number().int().positive(),
         // Valor por defecto
         quantity: z.number().default(0),
         check: z.boolean().default(false),

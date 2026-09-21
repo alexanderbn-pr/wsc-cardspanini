@@ -69,6 +69,7 @@ export class JsonTeamRepository implements TeamRepository {
             id: raw.id,
             number: raw.number,
             name: raw.name,
+            positionId: 0,   // No FK in JSON source
             position: raw.position,
             check: false,       // Default: not collected yet
             quantity: 0,        // Default: none owned

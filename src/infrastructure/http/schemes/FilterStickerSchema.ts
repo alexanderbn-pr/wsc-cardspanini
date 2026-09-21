@@ -6,7 +6,7 @@ export const stickerFiltersSchema = z.object({
     idTeam: z.coerce.number().int().positive().optional(),
     number: z.string().optional(),
     name: z.string().optional(),
-    position: z.string().optional(),
+    positionId: z.coerce.number().int().positive().optional(),
     check: z.enum(["true", "false"]).transform(v => v === "true").optional(),
     quantity: z.coerce.number().int().min(0).optional(),
 }).merge(paginationSchema);

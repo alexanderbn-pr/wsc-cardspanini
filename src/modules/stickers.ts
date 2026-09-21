@@ -3,7 +3,7 @@ export interface StickerFilters {
     idTeam?: number;
     number?: string;
     name?: string;
-    position?: string;
+    positionId?: number;
     check?: boolean;
     quantity?: number;
     page: number;

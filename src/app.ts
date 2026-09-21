@@ -20,19 +20,23 @@ loadEnv();
 // Repository Prisma
 import { PrismaTeamRepository } from "./infrastructure/prisma/team.repository.js";
 import { PrismaStickerRepository } from "./infrastructure/prisma/sticker.repository.js";
+import { PrismaPositionRepository } from "./infrastructure/prisma/position.repository.js";
 import { RedisService } from "./infrastructure/redis/redis.service.js";
 
 
 // Services
 import { TeamService } from './services/team.service.js';
 import { StickerService } from './services/sticker.service.js';
+import { PositionService } from './services/position.service.js';
 // Controllers
 import { TeamController } from './infrastructure/http/controllers/teams.controller.js';
 import { StickerController } from './infrastructure/http/controllers/stickers.controller.js';
+import { PositionController } from './infrastructure/http/controllers/positions.controller.js';
 
 // Route factories
 import createStickersRouter from './infrastructure/http/routes/stickers.js';
 import createTeamsRouter from './infrastructure/http/routes/teams.js';
+import createPositionsRouter from './infrastructure/http/routes/positions.js';
 const app = express();
 
 // -- MIDDLEWARES --
@@ -57,21 +61,26 @@ const redisService = new RedisService()
 //const teamRepository = new JsonTeamRepository();
 const teamRepository = new PrismaTeamRepository();
 const stickerRepository = new PrismaStickerRepository();
+const positionRepository = new PrismaPositionRepository();
 // Application services
 const teamService = new TeamService(teamRepository, redisService);
 const stickerService = new StickerService(stickerRepository, teamService, redisService);
+const positionService = new PositionService(positionRepository, redisService);
 // Controllers
 const teamController = new TeamController(teamService);
 const stickerController = new StickerController(stickerService);
+const positionController = new PositionController(positionService);
 
 // Routes (factory pattern)
 const stickersRouter = createStickersRouter(stickerController);
 const teamsRouter = createTeamsRouter(teamController);
+const positionsRouter = createPositionsRouter(positionController);
 
 // -- ROUTES --
 app.use('/api', healthRouter);
 app.use('/stickers', stickersRouter);
 app.use('/teams', teamsRouter);
+app.use('/positions', positionsRouter);
 
 // Error handling (must be last)
 app.use(errorHandler);

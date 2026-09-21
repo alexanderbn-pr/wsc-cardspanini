@@ -1,0 +1,7 @@
+model Position {
+  id       Int       @id @default(autoincrement())
+  name     String    @unique
+  stickers Sticker[]
+
+  @@map("Position")
+}

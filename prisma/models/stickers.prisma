@@ -1,12 +1,13 @@
 model Sticker {
-  id       Int    @id @default(autoincrement())
-  name     String
-  number   String
-  position String
-  check    Boolean @default(false)
-  quantity Int     @default(0)
-  idTeam   Int
-  team     Team    @relation(fields: [idTeam], references: [id])
+  id         Int      @id @default(autoincrement())
+  name       String
+  number     String
+  positionId Int
+  position   Position @relation(fields: [positionId], references: [id])
+  check      Boolean  @default(false)
+  quantity   Int      @default(0)
+  idTeam     Int
+  team       Team     @relation(fields: [idTeam], references: [id])
 
   @@map("Stickers")
 }
