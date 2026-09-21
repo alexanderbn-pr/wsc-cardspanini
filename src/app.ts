@@ -2,6 +2,10 @@ import express from 'express';
 import { loadEnv } from './config/env.js';
 import { errorHandler } from './infrastructure/http/middlewares/errorHandler.js';
 import { corsMiddleware } from './infrastructure/http/middlewares/cors.js';
+import { requestIdMiddleware } from './infrastructure/http/middlewares/requestId.js';
+import { pinoHttp } from 'pino-http';
+
+import { logger } from './infrastructure/logger/logger.js';
 import healthRouter from './infrastructure/http/routes/health.js';
 
 // Load env BEFORE any adapter that needs it
@@ -33,6 +37,17 @@ const app = express();
 
 // -- MIDDLEWARES --
 app.use(corsMiddleware());
+app.use(requestIdMiddleware);
+app.use(pinoHttp({ 
+  logger,
+  genReqId: (req) => req.id,
+  serializers: {
+    req: (req) => ({ id: req.id, method: req.method, url: req.url }),
+    res: (res) => ({ statusCode: res.statusCode }),
+  },
+  customSuccessMessage: (req, res) => `${req.method} ${req.url} ${res.statusCode}`,
+  customErrorMessage: (req, res, err) => `${req.method} ${req.url} ${res.statusCode} — ${err.message}`,
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

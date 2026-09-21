@@ -1,5 +1,6 @@
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import { getEnv } from "./env.js";
+import { logger } from "../infrastructure/logger/logger.js";
 
 let supabase: SupabaseClient;
 
@@ -17,7 +18,7 @@ export function initDatabase(): SupabaseClient {
         persistSession: false,
       },
     });
-    console.log("✅ Supabase client initialized");
+    logger.info('Supabase client initialized');
   }
   return supabase;
 }

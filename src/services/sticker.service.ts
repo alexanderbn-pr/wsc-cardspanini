@@ -4,6 +4,8 @@ import { TeamService } from "../services/team.service.js";
 import { Sticker } from "../domain/entities/Sticker.js";
 import { RedisService } from "src/infrastructure/redis/redis.service.js";
 import { getStickerFilterCacheKey } from "src/infrastructure/redis/redis.keys.js"
+import { logger } from "../infrastructure/logger/logger.js";
+
 export class StickerService {
 
     constructor(
@@ -18,17 +20,16 @@ export class StickerService {
         limit?: number,
         offset?: number
     ): Promise<Sticker[]> {
-        //comporbar que el team existe para capturar el error
         await this.teamService.getById(teamId);
 
         const cacheKey = `team:${teamId}:stickers`;
         let stickers = await this.redisService.get<Sticker[]>(cacheKey);
         if(!stickers){
-            console.log("Cacheando los stickers de ", cacheKey)
-            stickers = await await this.stickerRepository.getByTeamId(teamId);
-            await this.redisService.set(cacheKey,stickers, 30)
-        }else{
-            console.log("Recuperados los stickers de la cache ", cacheKey)
+            logger.debug({ teamId }, 'Cache miss — fetching stickers from database');
+            stickers = await this.stickerRepository.getByTeamId(teamId);
+            await this.redisService.set(cacheKey, stickers, 30)
+        } else {
+            logger.debug({ teamId }, 'Cache hit — stickers loaded from Redis');
         }
 
         if (position) {
@@ -48,25 +49,27 @@ export class StickerService {
 
     async filterStickers(filters: StickerFilters): Promise<Sticker[]>{
         const cacheKey = getStickerFilterCacheKey(filters)
-        console.log("cache de filtros ", cacheKey)
+        logger.debug({ filters }, 'Filtering stickers');
         let stickers = await this.redisService.get<Sticker[]>(cacheKey);
         if(!stickers){
+            logger.debug({ filters }, 'Cache miss — fetching filtered stickers from database');
             stickers = await this.stickerRepository.filterStickers(filters)
-            await this.redisService.set(cacheKey,stickers, 30)
+            await this.redisService.set(cacheKey, stickers, 30)
+        } else {
+            logger.debug({ filters }, 'Cache hit — filtered stickers loaded from Redis');
         }
         return stickers || [];
     }
 
-
     async create(sticker: Sticker, teamId: number): Promise<Sticker> {
-        //comporbar que el team existe para capturar el error
         await this.teamService.getById(teamId);
-        const createdSticker = this.stickerRepository.create(sticker, teamId);
+        logger.info({ teamId, sticker: { name: sticker.name, number: sticker.number } }, 'Creating sticker');
+        const createdSticker = await this.stickerRepository.create(sticker, teamId);
 
-        // Eliminamos el registro de cahce de los stickers del equipo porque hemos creado uno nuevo
-        // Se volvera a cachear cuando se llamade nuevo a recoger los stickers por equipo
+        // Invalidate cache after create
         const cacheKey = `team:${teamId}:stickers`;
         await this.redisService.delete(cacheKey)
+        logger.debug({ teamId }, 'Cache invalidated after sticker creation');
 
         return createdSticker;
     }
