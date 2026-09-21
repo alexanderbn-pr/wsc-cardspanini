@@ -1,14 +1,15 @@
 import { StickerFilters } from "src/modules/stickers.js";
 import { StickerRepository } from "../domain/repositories/sticker.repository.js";
-import { TeamRepository } from "../domain/repositories/team.repository.js";
+import { TeamService } from "../services/team.service.js";
 import { Sticker } from "../domain/entities/Sticker.js";
-import { AppError } from "../infrastructure/http/middlewares/errorHandler.js";
-
+import { RedisService } from "src/infrastructure/redis/redis.service.js";
+import { getStickerFilterCacheKey } from "src/infrastructure/redis/redis.keys.js"
 export class StickerService {
 
     constructor(
         private readonly stickerRepository: StickerRepository,
-        private readonly teamRepository: TeamRepository
+        private readonly teamService: TeamService,
+        private readonly redisService: RedisService,
     ) {}
 
     async getByTeamId(
@@ -17,12 +18,18 @@ export class StickerService {
         limit?: number,
         offset?: number
     ): Promise<Sticker[]> {
-        const team = await this.teamRepository.getById(teamId);
-        if (!team) {
-            throw new AppError(404, `Team with id ${teamId} not found`);
-        }
+        //comporbar que el team existe para capturar el error
+        await this.teamService.getById(teamId);
 
-        let stickers = await this.stickerRepository.getByTeamId(teamId);
+        const cacheKey = `team:${teamId}:stickers`;
+        let stickers = await this.redisService.get<Sticker[]>(cacheKey);
+        if(!stickers){
+            console.log("Cacheando los stickers de ", cacheKey)
+            stickers = await await this.stickerRepository.getByTeamId(teamId);
+            await this.redisService.set(cacheKey,stickers, 30)
+        }else{
+            console.log("Recuperados los stickers de la cache ", cacheKey)
+        }
 
         if (position) {
             stickers = stickers.filter(
@@ -36,20 +43,31 @@ export class StickerService {
         const end = limit !== undefined
             ? start + limit
             : undefined;
-
         return stickers.slice(start, end);
     }
 
     async filterStickers(filters: StickerFilters): Promise<Sticker[]>{
-        const stickers = await this.stickerRepository.filterStickers(filters)
+        const cacheKey = getStickerFilterCacheKey(filters)
+        console.log("cache de filtros ", cacheKey)
+        let stickers = await this.redisService.get<Sticker[]>(cacheKey);
+        if(!stickers){
+            stickers = await this.stickerRepository.filterStickers(filters)
+            await this.redisService.set(cacheKey,stickers, 30)
+        }
         return stickers || [];
     }
 
+
     async create(sticker: Sticker, teamId: number): Promise<Sticker> {
-        const team = await this.teamRepository.getById(teamId);
-        if (!team) {
-            throw new AppError(404, `Team with id ${teamId} not found`);
-        }
-        return this.stickerRepository.create(sticker, teamId);
+        //comporbar que el team existe para capturar el error
+        await this.teamService.getById(teamId);
+        const createdSticker = this.stickerRepository.create(sticker, teamId);
+
+        // Eliminamos el registro de cahce de los stickers del equipo porque hemos creado uno nuevo
+        // Se volvera a cachear cuando se llamade nuevo a recoger los stickers por equipo
+        const cacheKey = `team:${teamId}:stickers`;
+        await this.redisService.delete(cacheKey)
+
+        return createdSticker;
     }
 }

@@ -16,12 +16,12 @@ loadEnv();
 // Repository Prisma
 import { PrismaTeamRepository } from "./infrastructure/prisma/team.repository.js";
 import { PrismaStickerRepository } from "./infrastructure/prisma/sticker.repository.js";
+import { RedisService } from "./infrastructure/redis/redis.service.js";
 
 
 // Services
 import { TeamService } from './services/team.service.js';
 import { StickerService } from './services/sticker.service.js';
-
 // Controllers
 import { TeamController } from './infrastructure/http/controllers/teams.controller.js';
 import { StickerController } from './infrastructure/http/controllers/stickers.controller.js';
@@ -29,7 +29,6 @@ import { StickerController } from './infrastructure/http/controllers/stickers.co
 // Route factories
 import createStickersRouter from './infrastructure/http/routes/stickers.js';
 import createTeamsRouter from './infrastructure/http/routes/teams.js';
-
 const app = express();
 
 // -- MIDDLEWARES --
@@ -37,14 +36,15 @@ app.use(corsMiddleware());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+const redisService = new RedisService()
 // -- DEPENDENCY INJECTION (Composition Root) --
 // Infrastructure adapters
 //const teamRepository = new JsonTeamRepository();
 const teamRepository = new PrismaTeamRepository();
 const stickerRepository = new PrismaStickerRepository();
 // Application services
-const teamService = new TeamService(teamRepository);
-const stickerService = new StickerService(stickerRepository, teamRepository);
+const teamService = new TeamService(teamRepository, redisService);
+const stickerService = new StickerService(stickerRepository, teamService, redisService);
 // Controllers
 const teamController = new TeamController(teamService);
 const stickerController = new StickerController(stickerService);
