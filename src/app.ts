@@ -4,9 +4,11 @@ import { errorHandler } from './infrastructure/http/middlewares/errorHandler.js'
 import { corsMiddleware } from './infrastructure/http/middlewares/cors.js';
 import { requestIdMiddleware } from './infrastructure/http/middlewares/requestId.js';
 import { pinoHttp } from 'pino-http';
+import swaggerUi from 'swagger-ui-express';
 
 import { logger } from './infrastructure/logger/logger.js';
 import healthRouter from './infrastructure/http/routes/health.js';
+import { openApiDocument } from './infrastructure/http/openapi/document.js';
 
 // Load env BEFORE any adapter that needs it
 loadEnv();
@@ -81,6 +83,10 @@ app.use('/api', healthRouter);
 app.use('/stickers', stickersRouter);
 app.use('/teams', teamsRouter);
 app.use('/positions', positionsRouter);
+
+// Swagger UI and OpenAPI JSON
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(openApiDocument));
+app.get('/api/openapi.json', (req, res) => res.json(openApiDocument));
 
 // Error handling (must be last)
 app.use(errorHandler);
