@@ -5,11 +5,11 @@ import { corsMiddleware } from './infrastructure/http/middlewares/cors.js';
 import { requestIdMiddleware } from './infrastructure/http/middlewares/requestId.js';
 import { pinoHttp } from 'pino-http';
 import swaggerUi from 'swagger-ui-express';
-
+import helmet from 'helmet'
 import { logger } from './infrastructure/logger/logger.js';
 import healthRouter from './infrastructure/http/routes/health.js';
 import { openApiDocument } from './infrastructure/http/openapi/document.js';
-
+import { apiRateLimiter } from "./infrastructure/http/rate-limit.js";
 // Load env BEFORE any adapter that needs it
 loadEnv();
 
@@ -40,7 +40,6 @@ import createStickersRouter from './infrastructure/http/routes/stickers.js';
 import createTeamsRouter from './infrastructure/http/routes/teams.js';
 import createPositionsRouter from './infrastructure/http/routes/positions.js';
 const app = express();
-
 // -- MIDDLEWARES --
 app.use(corsMiddleware());
 app.use(requestIdMiddleware);
@@ -54,8 +53,10 @@ app.use(pinoHttp({
   customSuccessMessage: (req, res) => `${req.method} ${req.url} ${res.statusCode}`,
   customErrorMessage: (req, res, err) => `${req.method} ${req.url} ${res.statusCode} — ${err.message}`,
 }));
+app.use(apiRateLimiter);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(helmet());
 
 const redisService = new RedisService()
 // -- DEPENDENCY INJECTION (Composition Root) --
