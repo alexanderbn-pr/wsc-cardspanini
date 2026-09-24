@@ -23,6 +23,7 @@ loadEnv();
 import { PrismaTeamRepository } from "./infrastructure/prisma/team.repository.js";
 import { PrismaStickerRepository } from "./infrastructure/prisma/sticker.repository.js";
 import { PrismaPositionRepository } from "./infrastructure/prisma/position.repository.js";
+import { PrismaAuthRepository } from "./infrastructure/prisma/auth.repository.js";
 import { RedisService } from "./infrastructure/redis/redis.service.js";
 
 
@@ -30,6 +31,8 @@ import { RedisService } from "./infrastructure/redis/redis.service.js";
 import { TeamService } from './services/team.service.js';
 import { StickerService } from './services/sticker.service.js';
 import { PositionService } from './services/position.service.js';
+import { AuthService } from './services/auth.service.js';
+
 // Controllers
 import { TeamController } from './infrastructure/http/controllers/teams.controller.js';
 import { StickerController } from './infrastructure/http/controllers/stickers.controller.js';
@@ -39,6 +42,9 @@ import { PositionController } from './infrastructure/http/controllers/positions.
 import createStickersRouter from './infrastructure/http/routes/stickers.js';
 import createTeamsRouter from './infrastructure/http/routes/teams.js';
 import createPositionsRouter from './infrastructure/http/routes/positions.js';
+import manageAuthRouter from './infrastructure/http/routes/auth.js';
+
+import { AuthController } from './infrastructure/http/controllers/auth.controller.js';
 const app = express();
 // -- MIDDLEWARES --
 app.use(corsMiddleware());
@@ -65,25 +71,32 @@ const redisService = new RedisService()
 const teamRepository = new PrismaTeamRepository();
 const stickerRepository = new PrismaStickerRepository();
 const positionRepository = new PrismaPositionRepository();
+const authRepository = new PrismaAuthRepository();
+
 // Application services
 const teamService = new TeamService(teamRepository, redisService);
 const stickerService = new StickerService(stickerRepository, teamService, redisService);
 const positionService = new PositionService(positionRepository, redisService);
+const authService = new AuthService(authRepository);
+
 // Controllers
 const teamController = new TeamController(teamService);
 const stickerController = new StickerController(stickerService);
 const positionController = new PositionController(positionService);
-
+const authController = new AuthController(authService);
 // Routes (factory pattern)
 const stickersRouter = createStickersRouter(stickerController);
 const teamsRouter = createTeamsRouter(teamController);
 const positionsRouter = createPositionsRouter(positionController);
+const authRouter = manageAuthRouter(authController);
 
 // -- ROUTES --
 app.use('/api', healthRouter);
 app.use('/stickers', stickersRouter);
 app.use('/teams', teamsRouter);
 app.use('/positions', positionsRouter);
+app.use('/auth', authRouter);
+
 
 // Swagger UI and OpenAPI JSON
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(openApiDocument));
