@@ -2,6 +2,8 @@ import { Team } from "../../domain/entities/Team.js";
 import { Sticker } from "../../domain/entities/Sticker.js";
 import { TeamRepository } from "../../domain/repositories/team.repository.js";
 import { prisma } from "../../config/prisma.js";
+import { DB_RETRY_CONFIG } from "../../config/retry.js";
+import pRetry from "p-retry";
 
 interface TeamRow {
   id: bigint | number;
@@ -29,22 +31,30 @@ interface StickerRow {
 export class PrismaTeamRepository implements TeamRepository {
 
   async getAll(): Promise<Team[]> {
-    const teams = await prisma.$queryRaw<TeamRow[]>`
-      SELECT id, name FROM "Teams" ORDER BY id ASC
-    `;
+    const teams = await pRetry(
+      () =>
+        prisma.$queryRaw<TeamRow[]>`
+          SELECT id, name FROM "Teams" ORDER BY id ASC
+        `,
+      DB_RETRY_CONFIG,
+    );
 
     if (teams.length === 0) return [];
 
     const teamIds = teams.map(t => Number(t.id));
 
-    const stickers = await prisma.$queryRaw<StickerRow[]>`
-      SELECT s.id, s.name, s.number, s."positionId", s.check, s.quantity, s."idTeam",
-             p.name AS "positionName"
-      FROM "Stickers" s
-      LEFT JOIN "Position" p ON s."positionId" = p.id
-      WHERE s."idTeam" = ANY(${teamIds})
-      ORDER BY s.id ASC
-    `;
+    const stickers = await pRetry(
+      () =>
+        prisma.$queryRaw<StickerRow[]>`
+          SELECT s.id, s.name, s.number, s."positionId", s.check, s.quantity, s."idTeam",
+                 p.name AS "positionName"
+          FROM "Stickers" s
+          LEFT JOIN "Position" p ON s."positionId" = p.id
+          WHERE s."idTeam" = ANY(${teamIds})
+          ORDER BY s.id ASC
+        `,
+      DB_RETRY_CONFIG,
+    );
 
     const stickersByTeam = new Map<number, Sticker[]>();
     for (const row of stickers) {
@@ -61,20 +71,28 @@ export class PrismaTeamRepository implements TeamRepository {
   }
 
   async getById(id: number): Promise<Team | undefined> {
-    const team = await prisma.$queryRaw<TeamRow[]>`
-      SELECT id, name FROM "Teams" WHERE id = ${id}
-    `;
+    const team = await pRetry(
+      () =>
+        prisma.$queryRaw<TeamRow[]>`
+          SELECT id, name FROM "Teams" WHERE id = ${id}
+        `,
+      DB_RETRY_CONFIG,
+    );
 
     if (team.length === 0) return undefined;
 
-    const stickers = await prisma.$queryRaw<StickerRow[]>`
-      SELECT s.id, s.name, s.number, s."positionId", s.check, s.quantity, s."idTeam",
-             p.name AS "positionName"
-      FROM "Stickers" s
-      LEFT JOIN "Position" p ON s."positionId" = p.id
-      WHERE s."idTeam" = ${id}
-      ORDER BY s.id ASC
-    `;
+    const stickers = await pRetry(
+      () =>
+        prisma.$queryRaw<StickerRow[]>`
+          SELECT s.id, s.name, s.number, s."positionId", s.check, s.quantity, s."idTeam",
+                 p.name AS "positionName"
+          FROM "Stickers" s
+          LEFT JOIN "Position" p ON s."positionId" = p.id
+          WHERE s."idTeam" = ${id}
+          ORDER BY s.id ASC
+        `,
+      DB_RETRY_CONFIG,
+    );
 
     return {
       id: Number(team[0].id),

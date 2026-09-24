@@ -1,6 +1,7 @@
 import { Position } from "../../domain/entities/Position.js";
 import { PositionRepository } from "../../domain/repositories/position.repository.js";
 import { prisma } from "../../config/prisma.js";
+import { DB_RETRY_CONFIG } from "../../config/retry.js";
 import pRetry from "p-retry";
 
 /**
@@ -15,12 +16,7 @@ async getAll(): Promise<Position[]> {
             prisma.position.findMany({
                 orderBy: { id: "asc" },
             }),
-        {
-            retries: 3,
-            minTimeout: 500,
-            factor: 2,
-            maxTimeout: 5000,
-        }
+        DB_RETRY_CONFIG,
     );
     return positions.map(this.mapPosition);
 }
