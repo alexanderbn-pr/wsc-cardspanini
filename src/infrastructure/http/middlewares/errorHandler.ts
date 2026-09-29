@@ -19,10 +19,13 @@ export function errorHandler(
   res: Response,
   _next: NextFunction
 ): void {
-  logger.error(
-    { err, requestId: req.id, method: req.method, url: req.url },
-    err.message
-  );
+  // Dependiendo del error mostrar en el log un warn o un error
+  const log =
+    err instanceof AppError && err.isOperational && err.statusCode < 500
+      ? logger.warn.bind(logger)
+      : logger.error.bind(logger);
+
+  log({ err, requestId: req.id, method: req.method, url: req.url }, err.message);
 
   if (err instanceof ZodError) {
     res.status(400).json({

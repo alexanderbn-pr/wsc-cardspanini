@@ -6,6 +6,13 @@ import { TeamResponseSchema, StickerResponseSchema, ErrorResponseSchema, Positio
 
 const registry = new OpenAPIRegistry();
 
+// Esquema de seguridad: habilita el boton "Authorize" de Swagger UI.
+registry.registerComponent('securitySchemes', 'bearerAuth', {
+  type: 'http',
+  scheme: 'bearer',
+  bearerFormat: 'JWT',
+});
+
 // Register path parameters
 const TeamIdParam = registry.registerParameter(
   'TeamId',
@@ -29,6 +36,7 @@ registry.registerPath({
   path: '/teams',
   summary: 'Get all teams',
   description: 'Returns all teams',
+  security: [{ bearerAuth: [] }],
   responses: {
     200: {
       description: 'Successful response',
@@ -49,6 +57,7 @@ registry.registerPath({
   request: {
     params: z.object({ id: TeamIdParam }),
   },
+  security: [{ bearerAuth: [] }],
   responses: {
     200: {
       description: 'Team found',
@@ -77,6 +86,7 @@ registry.registerPath({
   request: {
     query: stickerFiltersSchema,
   },
+  security: [{ bearerAuth: [] }],
   responses: {
     200: {
       description: 'Successful response',
@@ -105,6 +115,7 @@ registry.registerPath({
   request: {
     params: z.object({ id: StickerIdParam }),
   },
+  security: [{ bearerAuth: [] }],
   responses: {
     200: {
       description: 'Stickers found',
@@ -131,6 +142,7 @@ registry.registerPath({
       },
     },
   },
+  security: [{ bearerAuth: [] }],
   responses: {
     201: {
       description: 'Sticker created',
@@ -156,6 +168,7 @@ registry.registerPath({
   path: '/positions',
   summary: 'Get all positions',
   description: 'Returns all positions',
+  security: [{ bearerAuth: [] }],
   responses: {
     200: {
       description: 'Successful response',

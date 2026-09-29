@@ -13,3 +13,8 @@ export interface LoginResponse {
     user: UserInput;
     accessToken: string;
 }
+
+export interface AuthenticatedUser {
+    id: number;
+    role: string;
+}

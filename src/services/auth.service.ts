@@ -1,8 +1,11 @@
 import { User } from "../domain/entities/User.js";
 import { AuthRepository } from "../domain/repositories/auth.repository.js";
 import { getEnv } from "../config/env.js";
-import { SignJWT } from "jose";
-import { RegisterInput, LoginInput, LoginResponse } from "../modules/users.js"
+import { jwtVerify, SignJWT } from "jose";
+import { RegisterInput, LoginInput, LoginResponse, AuthenticatedUser } from "../modules/users.js"
+import { AUTH_TOKEN_ERROR_MESSAGE } from "../config/auth.constants.js";
+import { AppError } from "../infrastructure/http/middlewares/errorHandler.js";
+import { logger } from "../infrastructure/logger/logger.js";
 import argon2 from "argon2"
 
 export class AuthService {
@@ -27,7 +30,7 @@ export class AuthService {
     async delete(id: number): Promise<void> {
         const user = await this.authRepository.findById(id)
         if(!user){
-            throw new Error("User not exist")
+            throw new AppError(404, "User not exist")
         }
         await this.authRepository.delete(id);
     }
@@ -65,5 +68,29 @@ export class AuthService {
             user: userWithoutPassword,
             accessToken,
         };
+    }
+
+    // Verifica un access token emitido por login() y devuelve la identidad que este transporta. 
+    async verifyAccessToken(token: string): Promise<AuthenticatedUser> {
+        const { JWT_SECRET } = getEnv();
+        const secret = new TextEncoder().encode(JWT_SECRET);
+
+        let payload;
+        try {
+            ({ payload } = await jwtVerify(token, secret, {
+                algorithms: ["HS256"],
+                requiredClaims: ["sub"],
+            }));
+        } catch (err) {
+            logger.debug({ err }, "Access token verification failed");
+            throw new AppError(401, AUTH_TOKEN_ERROR_MESSAGE);
+        }
+        const id = Number(payload.sub);
+        if (!Number.isSafeInteger(id) || id <= 0) {
+            throw new AppError(401, AUTH_TOKEN_ERROR_MESSAGE);
+        }
+        const role = typeof payload.role === "string" ? payload.role : "";
+
+        return { id, role };
     }
 }

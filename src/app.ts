@@ -85,10 +85,10 @@ const stickerController = new StickerController(stickerService);
 const positionController = new PositionController(positionService);
 const authController = new AuthController(authService);
 // Routes (factory pattern)
-const stickersRouter = createStickersRouter(stickerController);
-const teamsRouter = createTeamsRouter(teamController);
-const positionsRouter = createPositionsRouter(positionController);
-const authRouter = manageAuthRouter(authController);
+const stickersRouter = createStickersRouter(stickerController, authService);
+const teamsRouter = createTeamsRouter(teamController, authService);
+const positionsRouter = createPositionsRouter(positionController, authService);
+const authRouter = manageAuthRouter(authController, authService);
 
 // -- ROUTES --
 app.use('/api', healthRouter);
