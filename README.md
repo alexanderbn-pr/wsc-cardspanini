@@ -84,6 +84,7 @@ src/
 ```
 
 **Problemas Identificados:**
+
 1. Tipo incorrecto en `Sticker.number` (number vs string en los datos)
 2. `TeamsModel` comentado → TeamController no puede funcionar
 3. Los métodos estáticos impiden la inyección de dependencias
@@ -127,14 +128,14 @@ src/
 ```typescript
 // ANTES
 export interface Sticker {
-    number: number;  // ❌ Tipo incorrecto
-    // ...
+  number: number; // ❌ Tipo incorrecto
+  // ...
 }
 
 // DESPUÉS
 export interface Sticker {
-    number: string;  // ✅ Coincide con datos JSON
-    // ...
+  number: string; // ✅ Coincide con datos JSON
+  // ...
 }
 ```
 
@@ -150,13 +151,13 @@ import { TeamRepository } from "../domain/repositories/team.repository.js";
 import teamsData from "../data/teams.json" with { type: "json" };
 
 export class JsonTeamRepository implements TeamRepository {
-    async getAll(): Promise<Team[]> {
-        return teamsData.teams as Team[];
-    }
+  async getAll(): Promise<Team[]> {
+    return teamsData.teams as Team[];
+  }
 
-    async getById(id: number): Promise<Team | undefined> {
-        return teamsData.teams.find(t => t.id === id) as Team | undefined;
-    }
+  async getById(id: number): Promise<Team | undefined> {
+    return teamsData.teams.find((t) => t.id === id) as Team | undefined;
+  }
 }
 ```
 
@@ -169,19 +170,19 @@ export class JsonTeamRepository implements TeamRepository {
 ```typescript
 // ANTES (Métodos estáticos - no se pueden inyectar dependencias)
 export class TeamController {
-    static async getAll(req: Request, res: Response) {
-        res.json(await TeamsModel.getAll());  // ❌ Dependencia directa del modelo
-    }
+  static async getAll(req: Request, res: Response) {
+    res.json(await TeamsModel.getAll()); // ❌ Dependencia directa del modelo
+  }
 }
 
 // DESPUÉS (Métodos de instancia con DI)
 export class TeamController {
-    constructor(private readonly teamService: TeamService) {}
+  constructor(private readonly teamService: TeamService) {}
 
-    getAll = async (req: Request, res: Response) => {
-        const teams = await this.teamService.getAll();  // ✅ Servicio inyectado
-        res.json(teams);
-    }
+  getAll = async (req: Request, res: Response) => {
+    const teams = await this.teamService.getAll(); // ✅ Servicio inyectado
+    res.json(teams);
+  };
 }
 ```
 
@@ -194,13 +195,13 @@ export class TeamController {
 ```typescript
 // ANTES (Imports estáticos)
 const router = Router();
-router.get("/", TeamController.getAll);  // ❌ Método estático
+router.get("/", TeamController.getAll); // ❌ Método estático
 
 // DESPUÉS (Patrón factory)
 export default function createTeamsRouter(controller: TeamController): Router {
-    const router = Router();
-    router.get("/", controller.getAll);  // ✅ Método de instancia
-    return router;
+  const router = Router();
+  router.get("/", controller.getAll); // ✅ Método de instancia
+  return router;
 }
 ```
 
@@ -212,12 +213,12 @@ export default function createTeamsRouter(controller: TeamController): Router {
 
 ```typescript
 // Raíz de Composición - Conectar todas las dependencias
-const teamRepository = new JsonTeamRepository();      // Infraestructura
-const teamService = new TeamService(teamRepository);  // Servicio
+const teamRepository = new JsonTeamRepository(); // Infraestructura
+const teamService = new TeamService(teamRepository); // Servicio
 const teamController = new TeamController(teamService); // Controller
 const teamsRouter = createTeamsRouter(teamController); // Rutas
 
-app.use('/teams', teamsRouter);  // Montar
+app.use("/teams", teamsRouter); // Montar
 ```
 
 ## Flujo de Dependencias
@@ -262,8 +263,8 @@ Con la arquitectura hexagonal, las pruebas se vuelven mucho más fáciles:
 ```typescript
 // Mock de la interfaz del repositorio
 const mockRepository: TeamRepository = {
-    getAll: async () => mockTeams,
-    getById: async (id) => mockTeams.find(t => t.id === id)
+  getAll: async () => mockTeams,
+  getById: async (id) => mockTeams.find((t) => t.id === id),
 };
 
 // Probar el servicio de forma aislada
@@ -277,14 +278,14 @@ const teams = await service.getAll();
 // Probar que JsonTeamRepository lee el JSON real
 const repo = new JsonTeamRepository();
 const teams = await repo.getAll();
-expect(teams).toHaveLength(25);  // Todos los equipos cargados
+expect(teams).toHaveLength(25); // Todos los equipos cargados
 ```
 
 ### Pruebas E2E (Capa de Aplicación)
 
 ```typescript
 // Probar el ciclo completo de una petición
-const response = await request(app).get('/teams');
+const response = await request(app).get("/teams");
 expect(response.status).toBe(200);
 ```
 

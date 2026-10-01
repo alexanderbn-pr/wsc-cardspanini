@@ -1,9 +1,7 @@
+import { Sticker } from "./Sticker.js";
 
-import { Sticker } from './Sticker.js'
-
-export interface Team{
- id: number;
- name: string;
- stickers: Sticker[];
+export interface Team {
+  id: number;
+  name: string;
+  stickers: Sticker[];
 }
-

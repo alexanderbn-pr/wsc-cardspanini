@@ -98,7 +98,7 @@ export class SupabaseTeamRepository implements TeamRepository {
    * Used by both getAll() and getById().
    */
   private groupStickersByTeam(
-    stickers: SupabaseStickerRow[]
+    stickers: SupabaseStickerRow[],
   ): Record<number, Sticker[]> {
     const grouped: Record<number, Sticker[]> = {};
     for (const row of stickers) {

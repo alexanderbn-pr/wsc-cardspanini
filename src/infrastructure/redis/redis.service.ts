@@ -4,12 +4,8 @@ import pRetry from "p-retry";
 import { CACHE_RETRY_CONFIG } from "../../config/retry.js";
 
 export class RedisService {
-
   async get<T>(key: string): Promise<T | null> {
-    const value = await pRetry(
-      () => redisClient.get(key),
-      CACHE_RETRY_CONFIG,
-    );
+    const value = await pRetry(() => redisClient.get(key), CACHE_RETRY_CONFIG);
 
     if (!value) {
       return null;
@@ -18,28 +14,17 @@ export class RedisService {
     return JSON.parse(value) as T;
   }
 
-  async set<T>(
-    key: string,
-    value: T,
-    ttlSeconds: number,
-  ): Promise<void> {
+  async set<T>(key: string, value: T, ttlSeconds: number): Promise<void> {
     await pRetry(
       () =>
-        redisClient.set(
-          key,
-          JSON.stringify(value),
-          {
-            EX: ttlSeconds,
-          },
-        ),
+        redisClient.set(key, JSON.stringify(value), {
+          EX: ttlSeconds,
+        }),
       CACHE_RETRY_CONFIG,
     );
   }
 
   async delete(key: string): Promise<void> {
-    await pRetry(
-      () => redisClient.del(key),
-      CACHE_RETRY_CONFIG,
-    );
+    await pRetry(() => redisClient.del(key), CACHE_RETRY_CONFIG);
   }
 }

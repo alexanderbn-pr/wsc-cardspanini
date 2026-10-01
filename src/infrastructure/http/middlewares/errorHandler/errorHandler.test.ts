@@ -131,7 +131,9 @@ describe("Error Handler Middleware", () => {
         status: "error",
         message: "Internal server error",
       });
-      const body = vi.mocked(res.json).mock.calls[0]?.[0] as { message: string };
+      const body = vi.mocked(res.json).mock.calls[0]?.[0] as {
+        message: string;
+      };
       expect(body.message).not.toContain("Database connection failed");
     });
 

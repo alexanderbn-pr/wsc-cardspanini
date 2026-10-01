@@ -1,5 +1,5 @@
 import { Sticker } from "../../domain/entities/Sticker.js";
-import { StickerFilters } from "../../modules/stickers.js"
+import { StickerFilters } from "../../modules/stickers.js";
 import { StickerRepository } from "../../domain/repositories/sticker.repository.js";
 import { prisma } from "../../config/prisma.js";
 import { DB_RETRY_CONFIG, DB_WRITE_RETRY_CONFIG } from "../../config/retry.js";
@@ -13,7 +13,6 @@ import pRetry from "p-retry";
  * PrismaPg driver adapter doesn't resolve relations with `include`.
  */
 export class PrismaStickerRepository implements StickerRepository {
-
   async getByTeamId(teamId: number): Promise<Sticker[]> {
     const rows = await pRetry(
       () =>
@@ -31,25 +30,24 @@ export class PrismaStickerRepository implements StickerRepository {
   }
 
   async create(sticker: Sticker, teamId: number): Promise<Sticker> {
-    const created = await pRetry(
-      async () => {
-        const result = await prisma.sticker.create({
-          data: {
-            name: sticker.name,
-            number: sticker.number,
-            positionId: sticker.positionId,
-            check: sticker.check,
-            quantity: sticker.quantity,
-            idTeam: teamId,
-          },
-        });
-        return result;
-      },
-      DB_WRITE_RETRY_CONFIG,
-    );
+    const created = await pRetry(async () => {
+      const result = await prisma.sticker.create({
+        data: {
+          name: sticker.name,
+          number: sticker.number,
+          positionId: sticker.positionId,
+          check: sticker.check,
+          quantity: sticker.quantity,
+          idTeam: teamId,
+        },
+      });
+      return result;
+    }, DB_WRITE_RETRY_CONFIG);
 
     // Fetch position name separately
-    const pos = await prisma.position.findUnique({ where: { id: created.positionId } });
+    const pos = await prisma.position.findUnique({
+      where: { id: created.positionId },
+    });
 
     return {
       id: created.id,
@@ -62,8 +60,8 @@ export class PrismaStickerRepository implements StickerRepository {
     };
   }
 
-  async filterStickers(filters: StickerFilters) : Promise<Sticker[]>{
-    const skip = filters.page * filters.limit
+  async filterStickers(filters: StickerFilters): Promise<Sticker[]> {
+    const skip = filters.page * filters.limit;
     const where: Record<string, any> = {};
     if (filters.id !== undefined) where.id = filters.id;
     if (filters.idTeam !== undefined) where.idTeam = filters.idTeam;
@@ -85,13 +83,13 @@ export class PrismaStickerRepository implements StickerRepository {
     );
 
     // Batch-fetch position names
-    const positionIds = [...new Set(stickers.map(s => s.positionId))];
+    const positionIds = [...new Set(stickers.map((s) => s.positionId))];
     const positions = await prisma.position.findMany({
       where: { id: { in: positionIds } },
     });
-    const posMap = new Map(positions.map(p => [p.id, p.name]));
+    const posMap = new Map(positions.map((p) => [p.id, p.name]));
 
-    return stickers.map(s => ({
+    return stickers.map((s) => ({
       id: Number(s.id),
       number: s.number,
       name: s.name,

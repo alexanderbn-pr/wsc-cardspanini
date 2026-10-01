@@ -107,9 +107,9 @@ Response (JSON)
   const teamService = new TeamService(teamRepository);
   const teamController = new TeamController(teamService);
   const stickerController = new StickerController(teamService);
-  
-  app.use('/stickers', createStickerRouter(stickerController));
-  app.use('/teams', createTeamsRouter(teamController));
+
+  app.use("/stickers", createStickerRouter(stickerController));
+  app.use("/teams", createTeamsRouter(teamController));
   ```
 
 ### DELETE: `src/models/teams.model.ts`
@@ -154,42 +154,38 @@ class TeamController {
 
 ## Testing Strategy
 
-| Layer | What to Test | Approach |
-|-------|-------------|----------|
-| Unit | JsonTeamRepository.getAll(), getById() | Import adapter, call methods, assert on mock teams.json data |
-| Integration | Route wiring | supertest: `GET /teams`, `GET /teams/1`, `GET /stickers/1` |
-| Regression | Existing health.test.ts, app.test.ts | Run `vitest` — should pass unchanged |
+| Layer       | What to Test                           | Approach                                                     |
+| ----------- | -------------------------------------- | ------------------------------------------------------------ |
+| Unit        | JsonTeamRepository.getAll(), getById() | Import adapter, call methods, assert on mock teams.json data |
+| Integration | Route wiring                           | supertest: `GET /teams`, `GET /teams/1`, `GET /stickers/1`   |
+| Regression  | Existing health.test.ts, app.test.ts   | Run `vitest` — should pass unchanged                         |
 
 ## Migration Order
 
 **Phase 1 — Adapter (no breakage)**
+
 1. Create `src/infrastructure/json-team.repository.ts`
 2. Create `src/infrastructure/index.ts`
 
-**Phase 2 — Controllers (fix DI)**
-3. Modify `src/controllers/teams.controller.ts` — static → instance DI
+**Phase 2 — Controllers (fix DI)** 3. Modify `src/controllers/teams.controller.ts` — static → instance DI
 
-**Phase 3 — Routes (fix wiring)**
-4. Modify `src/routes/stickers.ts` — factory pattern
-5. Modify `src/routes/teams.ts` — factory pattern
+**Phase 3 — Routes (fix wiring)** 4. Modify `src/routes/stickers.ts` — factory pattern 5. Modify `src/routes/teams.ts` — factory pattern
 
-**Phase 4 — Composition Root**
-6. Modify `src/app.ts` — manual DI wiring
+**Phase 4 — Composition Root** 6. Modify `src/app.ts` — manual DI wiring
 
-**Phase 5 — Cleanup**
-7. Delete `src/models/teams.model.ts`
+**Phase 5 — Cleanup** 7. Delete `src/models/teams.model.ts`
 
 **Validation**: Run `npm run typecheck` after each phase.
 
 ## Risk Analysis
 
-| Risk | Impact | Mitigation |
-|------|--------|------------|
-| `teams.json` `number` as string breaks `Sticker.number: number` | Medium | Adapter must parse/convert; fallback to string if NaN |
-| `id` at end of JSON objects confusing | Low | Object property order is irrelevant in JSON; adapter reads by key |
-| `app.test.ts` breaks if it mocks old route pattern | Medium | Read test before modifying app.ts; update mocks if needed |
-| Static → instance refactor breaks `TeamController` callers | Low | Only `teams.ts` route calls it — both change together |
-| ESM import assertion `{ type: 'json' }` unsupported | Low | Node 20 supports it; fallback to `fs.readFileSync` + `JSON.parse` |
+| Risk                                                            | Impact | Mitigation                                                        |
+| --------------------------------------------------------------- | ------ | ----------------------------------------------------------------- |
+| `teams.json` `number` as string breaks `Sticker.number: number` | Medium | Adapter must parse/convert; fallback to string if NaN             |
+| `id` at end of JSON objects confusing                           | Low    | Object property order is irrelevant in JSON; adapter reads by key |
+| `app.test.ts` breaks if it mocks old route pattern              | Medium | Read test before modifying app.ts; update mocks if needed         |
+| Static → instance refactor breaks `TeamController` callers      | Low    | Only `teams.ts` route calls it — both change together             |
+| ESM import assertion `{ type: 'json' }` unsupported             | Low    | Node 20 supports it; fallback to `fs.readFileSync` + `JSON.parse` |
 
 ## Open Questions
 

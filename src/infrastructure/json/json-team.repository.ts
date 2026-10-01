@@ -8,15 +8,15 @@ import teamsData from "../../data/teams.json" with { type: "json" };
  * Fields may differ from the domain entity — the adapter handles the mapping.
  */
 interface RawTeam {
-    name: string;
-    stickers: RawSticker[];
+  name: string;
+  stickers: RawSticker[];
 }
 
 interface RawSticker {
-    id: number;
-    number: string;
-    name: string;
-    position: string;
+  id: number;
+  number: string;
+  name: string;
+  position: string;
 }
 
 /**
@@ -31,48 +31,47 @@ interface RawSticker {
  * and the actual data source (JSON file in this case).
  */
 export class JsonTeamRepository implements TeamRepository {
+  private teams: Team[];
 
-    private teams: Team[];
+  constructor() {
+    this.teams = this.mapTeams();
+  }
 
-    constructor() {
-        this.teams = this.mapTeams();
-    }
+  async getAll(): Promise<Team[]> {
+    return this.teams;
+  }
 
-    async getAll(): Promise<Team[]> {
-        return this.teams;
-    }
+  async getById(id: number): Promise<Team | undefined> {
+    return this.teams.find((t) => t.id === id);
+  }
 
-    async getById(id: number): Promise<Team | undefined> {
-        return this.teams.find(t => t.id === id);
-    }
+  /**
+   * Maps raw JSON teams to domain entities.
+   * Handles field transformation and defaults.
+   */
+  private mapTeams(): Team[] {
+    const rawTeams = teamsData.teams as unknown as RawTeam[];
 
-    /**
-     * Maps raw JSON teams to domain entities.
-     * Handles field transformation and defaults.
-     */
-    private mapTeams(): Team[] {
-        const rawTeams = teamsData.teams as unknown as RawTeam[];
+    return rawTeams.map((raw, index) => ({
+      id: index + 1, // Derive ID from array position
+      name: raw.name,
+      stickers: raw.stickers.map(this.mapSticker),
+    }));
+  }
 
-        return rawTeams.map((raw, index) => ({
-            id: index + 1,  // Derive ID from array position
-            name: raw.name,
-            stickers: raw.stickers.map(this.mapSticker),
-        }));
-    }
-
-    /**
-     * Maps a raw JSON sticker to a domain Sticker entity.
-     * Adds defaults for fields not present in the JSON data.
-     */
-    private mapSticker(raw: RawSticker): Sticker {
-        return {
-            id: raw.id,
-            number: raw.number,
-            name: raw.name,
-            positionId: 0,   // No FK in JSON source
-            position: raw.position,
-            check: false,       // Default: not collected yet
-            quantity: 0,        // Default: none owned
-        };
-    }
+  /**
+   * Maps a raw JSON sticker to a domain Sticker entity.
+   * Adds defaults for fields not present in the JSON data.
+   */
+  private mapSticker(raw: RawSticker): Sticker {
+    return {
+      id: raw.id,
+      number: raw.number,
+      name: raw.name,
+      positionId: 0, // No FK in JSON source
+      position: raw.position,
+      check: false, // Default: not collected yet
+      quantity: 0, // Default: none owned
+    };
+  }
 }

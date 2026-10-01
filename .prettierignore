@@ -1,0 +1,7 @@
+# Dependencias y artefactos de build
+node_modules/
+dist/
+coverage/
+
+# Generado por `npm run prisma:merge`
+prisma/schema.prisma

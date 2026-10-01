@@ -17,11 +17,12 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
 // Utilizando el use passando la libreria de cors y la lista de url filtramos que dominios pueden hacer peticiones a nuestro backend, en caso no no pasar el filtro de origen permitimos a todos los dominios acceder al back es como un *
-app.use(cors({  
-    origin: ACCEPTED_ORIGINS
-}));
+app.use(
+  cors({
+    origin: ACCEPTED_ORIGINS,
+  }),
+);
 
 app.use((req, res, next) => {
   console.log(`${new Date().toLocaleTimeString()} - ${req.method} ${req.path}`);
@@ -33,7 +34,7 @@ app.use((req, res, next) => {
 const previousHome = (req, res, next) => {
   console.log("Previous home middleware");
   next();
-}
+};
 
 //En primer lugar lo que vemos es que definimos que tipo de consulta va en esta ruta (GET) respecto nodeJs nativo
 app.get("/", previousHome, (req, res) => {
@@ -47,7 +48,7 @@ app.get("/health", (req, res) => {
     uptime: process.uptime(), // tiempo de actividad del proceso en segundos
     os: process.platform,
     arch: process.arch,
-    nodeVersion: process.version
+    nodeVersion: process.version,
   });
 });
 
@@ -74,57 +75,64 @@ app.post("/player", (req, res) => {
 
 // Express utiliza path to regexp para poder definir rutas con parametros con expresiones regulares
 app.get("/player/:name", (req, res) => {
-    // Los parametros los va a entender siempre como cadena de texto, por lo que si queremos buscar por id que es un numero hay que parsearlo a numero
-    const { name } = req.params;
-    const player = players.find(p => p.name === name);
-    if (!player) {
-        return res.status(404).json({ error: "Player not found" });
-    }
-    res.json(player);
-})
-
-app.get("/teams/:id", (req, res) => {
-    const { id } = req.params;
-    const team = teams.teams.find(t => t.id === Number(id));
-    if (!team) {
-        return res.status(404).json({ error: "Team not found" });
-    }
-    res.json(team);
-})
-
-app.get("/teams", async(req, res) => {
-    // Se puede importar un archivo json de forma asincrona y dinamicamente, esto es util si el archivo es muy grande y no queremos cargarlo en memoria al inicio del servidor
-    const {default: jsonResponse} = await import("./scripts/teams.json", { with: { type: "json" } });
-    res.json(jsonResponse);
+  // Los parametros los va a entender siempre como cadena de texto, por lo que si queremos buscar por id que es un numero hay que parsearlo a numero
+  const { name } = req.params;
+  const player = players.find((p) => p.name === name);
+  if (!player) {
+    return res.status(404).json({ error: "Player not found" });
+  }
+  res.json(player);
 });
 
-app.get("/stickers/:id", async(req, res) => {
-    const { id } = req.params;
-    // En express se puede acceder a los query params de la url de forma sencilla con req.query, no hace falta parsear la url como en nodeJs nativo
-    console.log(req.query);
-    const {limit = DEFAULTS.LIMIT_PAGINATION, offset = DEFAULTS.OFFSET_PAGINATION, position} = req.query;
-    const team = teams.teams.find(t => t.id === Number(id));
-    if (!team) {
-        return res.status(404).json({ error: "Team not found" });
-    }
-    let stickers = team.stickers;
-    if (position) {
-        stickers = stickers.filter(s => s.position.toLocaleLowerCase() === position.toLocaleLowerCase());
-    }
-   const limitNumber = Number(limit);
-   const offsetNumber = Number(offset);
-   stickers = stickers.slice(offsetNumber, offsetNumber + limitNumber);
-   res.json(stickers);
+app.get("/teams/:id", (req, res) => {
+  const { id } = req.params;
+  const team = teams.teams.find((t) => t.id === Number(id));
+  if (!team) {
+    return res.status(404).json({ error: "Team not found" });
+  }
+  res.json(team);
+});
+
+app.get("/teams", async (req, res) => {
+  // Se puede importar un archivo json de forma asincrona y dinamicamente, esto es util si el archivo es muy grande y no queremos cargarlo en memoria al inicio del servidor
+  const { default: jsonResponse } = await import("./scripts/teams.json", {
+    with: { type: "json" },
+  });
+  res.json(jsonResponse);
+});
+
+app.get("/stickers/:id", async (req, res) => {
+  const { id } = req.params;
+  // En express se puede acceder a los query params de la url de forma sencilla con req.query, no hace falta parsear la url como en nodeJs nativo
+  console.log(req.query);
+  const {
+    limit = DEFAULTS.LIMIT_PAGINATION,
+    offset = DEFAULTS.OFFSET_PAGINATION,
+    position,
+  } = req.query;
+  const team = teams.teams.find((t) => t.id === Number(id));
+  if (!team) {
+    return res.status(404).json({ error: "Team not found" });
+  }
+  let stickers = team.stickers;
+  if (position) {
+    stickers = stickers.filter(
+      (s) => s.position.toLocaleLowerCase() === position.toLocaleLowerCase(),
+    );
+  }
+  const limitNumber = Number(limit);
+  const offsetNumber = Number(offset);
+  stickers = stickers.slice(offsetNumber, offsetNumber + limitNumber);
+  res.json(stickers);
 });
 
 // Opcional --> /acd o /abcd
 app.get("/a*cd", (req, res) => {
-    res.send("Ruta con comodin * " + req.path);
+  res.send("Ruta con comodin * " + req.path);
 });
 
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
-
 
 // CRUD: Create , Read, Update, Delete

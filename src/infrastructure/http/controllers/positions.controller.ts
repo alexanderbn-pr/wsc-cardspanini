@@ -1,13 +1,11 @@
-import { Request, Response } from 'express';
-import { PositionService } from '../../../services/position/position.service.js';
+import { Request, Response } from "express";
+import { PositionService } from "../../../services/position/position.service.js";
 
 export class PositionController {
-    constructor(
-        private readonly positionService: PositionService
-    ) {}
+  constructor(private readonly positionService: PositionService) {}
 
-    getAll = async(req: Request, res: Response) => {
-        const positions = await this.positionService.getAll();
-        res.json(positions);
-    }
+  getAll = async (req: Request, res: Response) => {
+    const positions = await this.positionService.getAll();
+    res.json(positions);
+  };
 }

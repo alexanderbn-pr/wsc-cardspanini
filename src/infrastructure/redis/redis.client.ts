@@ -6,13 +6,13 @@ export const redisClient = createClient({
 });
 
 redisClient.on("error", (error) => {
-  logger.error({ err: error }, 'Redis Client Error');
+  logger.error({ err: error }, "Redis Client Error");
 });
 
 export const connectRedis = async (): Promise<void> => {
   if (!redisClient.isOpen) {
     await redisClient.connect();
-    logger.info('Redis connected');
+    logger.info("Redis connected");
   }
 };
 

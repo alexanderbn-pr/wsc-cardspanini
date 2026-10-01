@@ -18,7 +18,7 @@ export function initDatabase(): SupabaseClient {
         persistSession: false,
       },
     });
-    logger.info('Supabase client initialized');
+    logger.info("Supabase client initialized");
   }
   return supabase;
 }

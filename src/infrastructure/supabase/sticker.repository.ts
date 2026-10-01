@@ -66,12 +66,16 @@ export class SupabaseStickerRepository implements StickerRepository {
     let query = this.client.from("Stickers").select("*, Position(name)");
 
     if (filters.id !== undefined) query = query.eq("id", filters.id);
-    if (filters.idTeam !== undefined) query = query.eq("idTeam", filters.idTeam);
-    if (filters.number !== undefined) query = query.eq("number", filters.number);
+    if (filters.idTeam !== undefined)
+      query = query.eq("idTeam", filters.idTeam);
+    if (filters.number !== undefined)
+      query = query.eq("number", filters.number);
     if (filters.name !== undefined) query = query.eq("name", filters.name);
-    if (filters.positionId !== undefined) query = query.eq("positionId", filters.positionId);
+    if (filters.positionId !== undefined)
+      query = query.eq("positionId", filters.positionId);
     if (filters.check !== undefined) query = query.eq("check", filters.check);
-    if (filters.quantity !== undefined) query = query.eq("quantity", filters.quantity);
+    if (filters.quantity !== undefined)
+      query = query.eq("quantity", filters.quantity);
 
     query = query.order("id", { ascending: true });
 

@@ -1,47 +1,55 @@
-import { OpenAPIRegistry, OpenApiGeneratorV3 } from '@asteasolutions/zod-to-openapi';
-import { z } from 'zod';
-import { CreateStickerSchema } from '../schemes/CreateStickerSchema.js';
-import { stickerFiltersSchema } from '../schemes/FilterStickerSchema.js';
-import { TeamResponseSchema, StickerResponseSchema, ErrorResponseSchema, PositionResponseSchema } from './schemas.js';
+import {
+  OpenAPIRegistry,
+  OpenApiGeneratorV3,
+} from "@asteasolutions/zod-to-openapi";
+import { z } from "zod";
+import { CreateStickerSchema } from "../schemes/CreateStickerSchema.js";
+import { stickerFiltersSchema } from "../schemes/FilterStickerSchema.js";
+import {
+  TeamResponseSchema,
+  StickerResponseSchema,
+  ErrorResponseSchema,
+  PositionResponseSchema,
+} from "./schemas.js";
 
 const registry = new OpenAPIRegistry();
 
 // Esquema de seguridad: habilita el boton "Authorize" de Swagger UI.
-registry.registerComponent('securitySchemes', 'bearerAuth', {
-  type: 'http',
-  scheme: 'bearer',
-  bearerFormat: 'JWT',
+registry.registerComponent("securitySchemes", "bearerAuth", {
+  type: "http",
+  scheme: "bearer",
+  bearerFormat: "JWT",
 });
 
 // Register path parameters
 const TeamIdParam = registry.registerParameter(
-  'TeamId',
+  "TeamId",
   z.number().openapi({
-    param: { name: 'id', in: 'path' },
+    param: { name: "id", in: "path" },
     example: 1,
-  })
+  }),
 );
 
 const StickerIdParam = registry.registerParameter(
-  'StickerId',
+  "StickerId",
   z.number().openapi({
-    param: { name: 'id', in: 'path' },
+    param: { name: "id", in: "path" },
     example: 1,
-  })
+  }),
 );
 
 // Register paths
 registry.registerPath({
-  method: 'get',
-  path: '/teams',
-  summary: 'Get all teams',
-  description: 'Returns all teams',
+  method: "get",
+  path: "/teams",
+  summary: "Get all teams",
+  description: "Returns all teams",
   security: [{ bearerAuth: [] }],
   responses: {
     200: {
-      description: 'Successful response',
+      description: "Successful response",
       content: {
-        'application/json': {
+        "application/json": {
           schema: TeamResponseSchema.array(),
         },
       },
@@ -50,27 +58,27 @@ registry.registerPath({
 });
 
 registry.registerPath({
-  method: 'get',
-  path: '/teams/{id}',
-  summary: 'Get team by ID',
-  description: 'Returns a team by its ID',
+  method: "get",
+  path: "/teams/{id}",
+  summary: "Get team by ID",
+  description: "Returns a team by its ID",
   request: {
     params: z.object({ id: TeamIdParam }),
   },
   security: [{ bearerAuth: [] }],
   responses: {
     200: {
-      description: 'Team found',
+      description: "Team found",
       content: {
-        'application/json': {
+        "application/json": {
           schema: TeamResponseSchema,
         },
       },
     },
     404: {
-      description: 'Team not found',
+      description: "Team not found",
       content: {
-        'application/json': {
+        "application/json": {
           schema: ErrorResponseSchema,
         },
       },
@@ -79,27 +87,27 @@ registry.registerPath({
 });
 
 registry.registerPath({
-  method: 'get',
-  path: '/stickers',
-  summary: 'Filter stickers',
-  description: 'Filter stickers with pagination',
+  method: "get",
+  path: "/stickers",
+  summary: "Filter stickers",
+  description: "Filter stickers with pagination",
   request: {
     query: stickerFiltersSchema,
   },
   security: [{ bearerAuth: [] }],
   responses: {
     200: {
-      description: 'Successful response',
+      description: "Successful response",
       content: {
-        'application/json': {
+        "application/json": {
           schema: StickerResponseSchema.array(),
         },
       },
     },
     400: {
-      description: 'Invalid query parameters',
+      description: "Invalid query parameters",
       content: {
-        'application/json': {
+        "application/json": {
           schema: ErrorResponseSchema,
         },
       },
@@ -108,19 +116,19 @@ registry.registerPath({
 });
 
 registry.registerPath({
-  method: 'get',
-  path: '/stickers/{id}',
-  summary: 'Get stickers by team ID',
-  description: 'Returns stickers for a specific team',
+  method: "get",
+  path: "/stickers/{id}",
+  summary: "Get stickers by team ID",
+  description: "Returns stickers for a specific team",
   request: {
     params: z.object({ id: StickerIdParam }),
   },
   security: [{ bearerAuth: [] }],
   responses: {
     200: {
-      description: 'Stickers found',
+      description: "Stickers found",
       content: {
-        'application/json': {
+        "application/json": {
           schema: StickerResponseSchema.array(),
         },
       },
@@ -129,14 +137,14 @@ registry.registerPath({
 });
 
 registry.registerPath({
-  method: 'post',
-  path: '/stickers/create',
-  summary: 'Create a sticker',
-  description: 'Create a new sticker',
+  method: "post",
+  path: "/stickers/create",
+  summary: "Create a sticker",
+  description: "Create a new sticker",
   request: {
     body: {
       content: {
-        'application/json': {
+        "application/json": {
           schema: CreateStickerSchema.shape.body,
         },
       },
@@ -145,17 +153,17 @@ registry.registerPath({
   security: [{ bearerAuth: [] }],
   responses: {
     201: {
-      description: 'Sticker created',
+      description: "Sticker created",
       content: {
-        'application/json': {
+        "application/json": {
           schema: StickerResponseSchema,
         },
       },
     },
     400: {
-      description: 'Invalid request',
+      description: "Invalid request",
       content: {
-        'application/json': {
+        "application/json": {
           schema: ErrorResponseSchema,
         },
       },
@@ -164,16 +172,16 @@ registry.registerPath({
 });
 
 registry.registerPath({
-  method: 'get',
-  path: '/positions',
-  summary: 'Get all positions',
-  description: 'Returns all positions',
+  method: "get",
+  path: "/positions",
+  summary: "Get all positions",
+  description: "Returns all positions",
   security: [{ bearerAuth: [] }],
   responses: {
     200: {
-      description: 'Successful response',
+      description: "Successful response",
       content: {
-        'application/json': {
+        "application/json": {
           schema: PositionResponseSchema.array(),
         },
       },
@@ -185,11 +193,11 @@ registry.registerPath({
 const generator = new OpenApiGeneratorV3(registry.definitions);
 
 export const openApiDocument = generator.generateDocument({
-  openapi: '3.0.3',
+  openapi: "3.0.3",
   info: {
-    title: 'Panini Stickers API',
-    description: 'API para gestionar equipos y cromos Panini de la Liga este',
-    version: '1.0.0',
+    title: "Panini Stickers API",
+    description: "API para gestionar equipos y cromos Panini de la Liga este",
+    version: "1.0.0",
   },
-  servers: [{ url: 'http://localhost:3001' }],
+  servers: [{ url: "http://localhost:3001" }],
 });

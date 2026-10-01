@@ -1,0 +1,18 @@
+{
+  // Formateo automatico al guardar. Requiere la extension "Prettier - Code formatter"
+  // (esbenp.prettier-vscode). Se declara aqui para que TODO el equipo formatee
+  // igual al guardar, en vez de depender de la config personal de cada editor.
+  "editor.formatOnSave": true,
+
+  // "fileWrites" = formatea solo cuando se guarda el archivo completo (Ctrl+S),
+  // no en cada pulsacion. Es el valor que corresponde a "formatear al guardar".
+  "editor.formatOnSaveMode": "fileWrites",
+
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+
+  // Fijamos el formateador tambien por lenguaje: si alguien tiene configurado otro
+  // formateador por defecto en su config global, los .ts siguen yendo a Prettier.
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
+}

@@ -29,7 +29,6 @@ interface StickerRow {
  * PrismaPg driver adapter doesn't resolve relations with `include`.
  */
 export class PrismaTeamRepository implements TeamRepository {
-
   async getAll(): Promise<Team[]> {
     const teams = await pRetry(
       () =>
@@ -41,7 +40,7 @@ export class PrismaTeamRepository implements TeamRepository {
 
     if (teams.length === 0) return [];
 
-    const teamIds = teams.map(t => Number(t.id));
+    const teamIds = teams.map((t) => Number(t.id));
 
     const stickers = await pRetry(
       () =>
@@ -63,7 +62,7 @@ export class PrismaTeamRepository implements TeamRepository {
       stickersByTeam.get(teamId)!.push(this.mapSticker(row));
     }
 
-    return teams.map(t => ({
+    return teams.map((t) => ({
       id: Number(t.id),
       name: t.name,
       stickers: stickersByTeam.get(Number(t.id)) ?? [],

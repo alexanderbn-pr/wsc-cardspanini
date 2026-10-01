@@ -1,8 +1,11 @@
-import { Request, Response, NextFunction, Router } from 'express';
-import { AuthService } from '../../../services/auth/auth.service.js';
-import { AuthenticatedUser } from '../../../modules/users.js';
-import { AUTH_HEADER_ERROR_MESSAGE, AUTH_REQUIRED_ERROR_MESSAGE } from '../../../costants/auth.constants.js';
-import { AppError } from './errorHandler/errorHandler.js';
+import { Request, Response, NextFunction, Router } from "express";
+import { AuthService } from "../../../services/auth/auth.service.js";
+import { AuthenticatedUser } from "../../../modules/users.js";
+import {
+  AUTH_HEADER_ERROR_MESSAGE,
+  AUTH_REQUIRED_ERROR_MESSAGE,
+} from "../../../costants/auth.constants.js";
+import { AppError } from "./errorHandler/errorHandler.js";
 
 declare global {
   namespace Express {
@@ -19,7 +22,7 @@ const BEARER_HEADER = /^Bearer\s+(.+)$/i;
  */
 export function parseBearerHeader(header: string | undefined): string | null {
   // El tipo no es el runtime: un header repetido llega como string[].
-  if (typeof header !== 'string') {
+  if (typeof header !== "string") {
     return null;
   }
 
@@ -53,8 +56,12 @@ const authenticate =
 
 /**
  * Self-delete only: solo quien porta el token puede borrar su propia cuenta.
-**/
-export function requireSelf(req: Request, _res: Response, next: NextFunction): void {
+ **/
+export function requireSelf(
+  req: Request,
+  _res: Response,
+  next: NextFunction,
+): void {
   if (req.user === undefined) {
     return next(new AppError(401, AUTH_REQUIRED_ERROR_MESSAGE));
   }
@@ -62,7 +69,7 @@ export function requireSelf(req: Request, _res: Response, next: NextFunction): v
   const requestedId = Number(req.params.id);
   //Comparamos el requestId de parametro de la llamada /delete/{id} con el del usuario que añadimos al llamar a autenticate
   if (!Number.isSafeInteger(requestedId) || requestedId !== req.user.id) {
-    return next(new AppError(403, 'You can only delete your own account'));
+    return next(new AppError(403, "You can only delete your own account"));
   }
 
   next();

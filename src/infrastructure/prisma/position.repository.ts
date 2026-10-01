@@ -9,17 +9,16 @@ import pRetry from "p-retry";
  * Handles ONLY position operations.
  */
 export class PrismaPositionRepository implements PositionRepository {
-
-async getAll(): Promise<Position[]> {
+  async getAll(): Promise<Position[]> {
     const positions = await pRetry(
-        () =>
-            prisma.position.findMany({
-                orderBy: { id: "asc" },
-            }),
-        DB_RETRY_CONFIG,
+      () =>
+        prisma.position.findMany({
+          orderBy: { id: "asc" },
+        }),
+      DB_RETRY_CONFIG,
     );
     return positions.map(this.mapPosition);
-}
+  }
 
   private mapPosition(row: any): Position {
     return {

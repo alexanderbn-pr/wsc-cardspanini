@@ -28,7 +28,10 @@ lerna-debug.log*
 Thumbs.db
 
 # IDE
-.vscode/
+# .vscode se comparte en parte: settings.json define el formateo al guardar y
+# debe llegar a todo el equipo. El resto (launch.json, caches) sigue ignorado.
+.vscode/*
+!.vscode/settings.json
 .idea/
 *.swp
 *.swo

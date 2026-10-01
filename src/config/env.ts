@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 const envSchema = z.object({
   SUPABASE_URL: z.string().url(),
@@ -6,8 +6,12 @@ const envSchema = z.object({
   SUPABASE_SERVICE_ROLE_KEY: z.string().min(1).optional(),
   JWT_SECRET: z.string().min(16, "JWT_SECRET must be at least 16 characters"),
   PORT: z.coerce.number().default(3000),
-  NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
-  LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace']).default('info'),
+  NODE_ENV: z
+    .enum(["development", "production", "test"])
+    .default("development"),
+  LOG_LEVEL: z
+    .enum(["fatal", "error", "warn", "info", "debug", "trace"])
+    .default("info"),
 });
 
 export type Env = z.infer<typeof envSchema>;
@@ -18,8 +22,11 @@ export function loadEnv(): Env {
   if (!env) {
     const parsed = envSchema.safeParse(process.env);
     if (!parsed.success) {
-      console.error('❌ Invalid environment variables:', parsed.error.flatten().fieldErrors);
-      throw new Error('Invalid environment variables');
+      console.error(
+        "❌ Invalid environment variables:",
+        parsed.error.flatten().fieldErrors,
+      );
+      throw new Error("Invalid environment variables");
     }
     env = parsed.data;
   }
@@ -28,7 +35,7 @@ export function loadEnv(): Env {
 
 export function getEnv(): Env {
   if (!env) {
-    throw new Error('Environment not loaded. Call loadEnv() first.');
+    throw new Error("Environment not loaded. Call loadEnv() first.");
   }
   return env;
 }
