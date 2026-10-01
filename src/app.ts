@@ -1,6 +1,6 @@
 import express from 'express';
 import { loadEnv } from './config/env.js';
-import { errorHandler } from './infrastructure/http/middlewares/errorHandler.js';
+import { errorHandler } from './infrastructure/http/middlewares/errorHandler/errorHandler.js';
 import { corsMiddleware } from './infrastructure/http/middlewares/cors.js';
 import { requestIdMiddleware } from './infrastructure/http/middlewares/requestId.js';
 import { pinoHttp } from 'pino-http';
@@ -28,10 +28,10 @@ import { RedisService } from "./infrastructure/redis/redis.service.js";
 
 
 // Services
-import { TeamService } from './services/team.service.js';
-import { StickerService } from './services/sticker.service.js';
-import { PositionService } from './services/position.service.js';
-import { AuthService } from './services/auth.service.js';
+import { TeamService } from './services/team/team.service.js';
+import { StickerService } from './services/sticker/sticker.service.js';
+import { PositionService } from './services/position/position.service.js';
+import { AuthService } from './services/auth/auth.service.js';
 
 // Controllers
 import { TeamController } from './infrastructure/http/controllers/teams.controller.js';

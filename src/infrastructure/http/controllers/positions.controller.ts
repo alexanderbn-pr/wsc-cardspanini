@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { PositionService } from '../../../services/position.service.js';
+import { PositionService } from '../../../services/position/position.service.js';
 
 export class PositionController {
     constructor(

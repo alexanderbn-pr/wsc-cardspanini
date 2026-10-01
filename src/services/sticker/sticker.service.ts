@@ -1,10 +1,10 @@
 import { StickerFilters } from "src/modules/stickers.js";
-import { StickerRepository } from "../domain/repositories/sticker.repository.js";
-import { TeamService } from "../services/team.service.js";
-import { Sticker } from "../domain/entities/Sticker.js";
+import { StickerRepository } from "../../domain/repositories/sticker.repository.js";
+import { TeamService } from "../team/team.service.js";
+import { Sticker } from "../../domain/entities/Sticker.js";
 import { RedisService } from "src/infrastructure/redis/redis.service.js";
 import { getStickerFilterCacheKey } from "src/infrastructure/redis/redis.keys.js"
-import { logger } from "../infrastructure/logger/logger.js";
+import { logger } from "../../infrastructure/logger/logger.js";
 
 export class StickerService {
 

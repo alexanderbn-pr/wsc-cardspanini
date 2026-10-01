@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction, Router } from 'express';
-import { AuthService } from '../../../services/auth.service.js';
+import { AuthService } from '../../../services/auth/auth.service.js';
 import { AuthenticatedUser } from '../../../modules/users.js';
-import { AUTH_HEADER_ERROR_MESSAGE, AUTH_REQUIRED_ERROR_MESSAGE } from '../../../config/auth.constants.js';
-import { AppError } from './errorHandler.js';
+import { AUTH_HEADER_ERROR_MESSAGE, AUTH_REQUIRED_ERROR_MESSAGE } from '../../../costants/auth.constants.js';
+import { AppError } from './errorHandler/errorHandler.js';
 
 declare global {
   namespace Express {

@@ -3,7 +3,7 @@ import { AuthController } from '../controllers/auth.controller.js';
 import { asyncHandler } from '../middlewares/asyncHandler.js';
 import { validate } from '../middlewares/zod.js';
 import { createProtectedRouter, requireSelf } from '../middlewares/auth.js';
-import { AuthService } from '../../../services/auth.service.js';
+import { AuthService } from '../../../services/auth/auth.service.js';
 import { CredentailsSchema} from '../schemes/CredentialsSchema.js'
 
 export default function manageAuthRouter(controller: AuthController, authService: AuthService): Router {

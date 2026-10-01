@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { PositionController } from '../controllers/positions.controller.js';
 import { asyncHandler } from '../middlewares/asyncHandler.js';
 import { createProtectedRouter } from '../middlewares/auth.js';
-import { AuthService } from '../../../services/auth.service.js';
+import { AuthService } from '../../../services/auth/auth.service.js';
 
 export default function createPositionsRouter(controller: PositionController, authService: AuthService): Router {
     // El guard va como primer registro del router: toda ruta declarada por

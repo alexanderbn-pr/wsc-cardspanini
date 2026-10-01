@@ -1,7 +1,7 @@
-import { Position } from "../domain/entities/Position.js";
-import { PositionRepository } from "../domain/repositories/position.repository.js";
+import { Position } from "../../domain/entities/Position.js";
+import { PositionRepository } from "../../domain/repositories/position.repository.js";
 import { RedisService } from "src/infrastructure/redis/redis.service.js";
-import { logger } from "../infrastructure/logger/logger.js";
+import { logger } from "../../infrastructure/logger/logger.js";
 
 export class PositionService {
 

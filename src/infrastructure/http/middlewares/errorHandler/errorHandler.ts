@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { ZodError } from 'zod';
-import { logger } from '../../logger/logger.js';
+import { logger } from '../../../logger/logger.js';
 
 export class AppError extends Error {
   constructor(

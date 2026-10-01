@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { AuthService } from "../../../services/auth.service.js";
+import { AuthService } from "../../../services/auth/auth.service.js";
 import { LoginInput, RegisterInput } from "../../../modules/users.js"
 
 export class AuthController {

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { DEFAULTS } from "../../../config/config.js";
-import { StickerService } from "../../../services/sticker.service.js";
+import { StickerService } from "../../../services/sticker/sticker.service.js";
 import { stickerFiltersSchema } from "../schemes/FilterStickerSchema.js";
 
 export class StickerController {

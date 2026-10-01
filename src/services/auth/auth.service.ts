@@ -1,11 +1,11 @@
-import { User } from "../domain/entities/User.js";
-import { AuthRepository } from "../domain/repositories/auth.repository.js";
-import { getEnv } from "../config/env.js";
+import { User } from "../../domain/entities/User.js";
+import { AuthRepository } from "../../domain/repositories/auth.repository.js";
+import { getEnv } from "../../config/env.js";
 import { jwtVerify, SignJWT } from "jose";
-import { RegisterInput, LoginInput, LoginResponse, AuthenticatedUser } from "../modules/users.js"
-import { AUTH_TOKEN_ERROR_MESSAGE } from "../config/auth.constants.js";
-import { AppError } from "../infrastructure/http/middlewares/errorHandler.js";
-import { logger } from "../infrastructure/logger/logger.js";
+import { RegisterInput, LoginInput, LoginResponse, AuthenticatedUser } from "../../modules/users.js"
+import { AUTH_TOKEN_ERROR_MESSAGE } from "../../costants/auth.constants.js";
+import { AppError } from "../../infrastructure/http/middlewares/errorHandler/errorHandler.js";
+import { logger } from "../../infrastructure/logger/logger.js";
 import argon2 from "argon2"
 
 export class AuthService {
