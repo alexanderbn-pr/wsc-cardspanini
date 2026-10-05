@@ -1,5 +1,5 @@
 node_modules/
-tests/
+/tests/
 scripts/
-docker/
+/docker/
 .vercel/
