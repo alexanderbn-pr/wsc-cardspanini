@@ -20,7 +20,7 @@ loadEnv();
 //import { SupabaseTeamRepository } from "./infrastructure/supabase/team.repository.js";
 //import { SupabaseStickerRepository } from "./infrastructure/supabase/sticker.repository.js";
 // Repository Prisma
-import { PrismaTeamRepository } from "./infrastructure/prisma/team.repository.js";
+import { PrismaTeamRepository } from "./infrastructure/prisma/team/team.repository.js";
 import { PrismaStickerRepository } from "./infrastructure/prisma/sticker.repository.js";
 import { PrismaPositionRepository } from "./infrastructure/prisma/position.repository.js";
 import { PrismaAuthRepository } from "./infrastructure/prisma/auth.repository.js";

@@ -38,7 +38,7 @@ export class TeamService {
     let team = await this.redisService.get<Team>(cacheKey);
     if (!team) {
       logger.debug({ teamId: id }, "Cache miss — fetching team from database");
-      let teamRepository = await this.teamRepository.getById(id);
+      const teamRepository = await this.teamRepository.getById(id);
       if (!teamRepository) {
         throw new AppError(404, `Team with id ${id} not found`);
       }

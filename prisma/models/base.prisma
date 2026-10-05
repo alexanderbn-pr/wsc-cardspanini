@@ -1,5 +1,16 @@
 // Configuracion de prisma base para la base de datos
 
+// INVARIANTE CRITICO: todos los ids (PK y FK) son int4 en Postgres.
+//
+// El 2026-10-02 "Stickers"."positionId" era int4 mientras las demas PK/FK eran
+// int8. Este schema declaraba Int en todas partes, asi que el desajuste era
+// invisible aqui y Prisma resolvia `include: { position: true }` a NULL en
+// silencio, sin error. Eso obligo a escribir $queryRaw con LEFT JOIN manuales.
+//
+// Reglas: un id y su FK deben ser del MISMO tipo, aqui siempre Int/int4.
+// Si cambias un id a BigInt, cambia tambien TODAS sus FK, o el include
+// devolvera null sin avisar. Migracion de referencia: prisma/sql/001-*.sql
+
 generator client {
   provider = "prisma-client-js"
 }
