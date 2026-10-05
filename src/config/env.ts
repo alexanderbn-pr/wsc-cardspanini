@@ -1,5 +1,19 @@
-import "dotenv/config";
 import { z } from "zod";
+
+// NO añadas `import "dotenv/config"` en este archivo.
+//
+// src/app.ts:2 importa loadEnv() desde aquí, así que este módulo está en el
+// grafo del artefacto que consume Vercel (dist/app.js). Poner dotenv aquí
+// acopla el arranque de producción a la lectura de ficheros y, peor, ata el
+// bootstrap de los tests a un módulo de configuración de producción.
+//
+// El artefacto de Vercel NO necesita leer ficheros: sus variables llegan por
+// el dashboard. Dónde SÍ debe estar dotenv:
+//   src/index.ts            → servidor local y Docker (lee el .env de verdad)
+//   src/tests/e2e/setup.ts  → tests; setupFiles corre antes de cualquier import
+//
+// Ojo: loadEnv() NO es reentrante (más abajo, `if (!env)`). Si algún día se
+// llama desde un sitio que no sea el primero en cargar, el fallo es silencioso.
 
 const envSchema = z.object({
   SUPABASE_URL: z.string().url(),
