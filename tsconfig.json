@@ -12,7 +12,10 @@
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
-    "baseUrl": "."
+    "baseUrl": ".",
+    "paths": {
+      "helmet": ["./node_modules/helmet/index.d.mts"]
+    }
   },
   "include": ["src/**/*.ts", "tests/**/*.ts", "api/**/*.ts"],
   "exclude": ["node_modules", "dist"]
