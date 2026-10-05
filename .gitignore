@@ -47,4 +47,9 @@ docker/data/
 # SDD
 .atl/
 .vercel
+
+# Entorno. .env* es amplio a propósito: cubre .env, .env.local, .env.production
+# y cualquier variante. La única excepción es la plantilla, que debe poder
+# subirse porque no contiene valores reales.
 .env*
+!.env.example
