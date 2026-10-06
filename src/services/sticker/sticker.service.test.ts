@@ -27,6 +27,8 @@ describe("StickerService", () => {
       getByTeamId: vi.fn<StickerRepository["getByTeamId"]>(),
       filterStickers: vi.fn<StickerRepository["filterStickers"]>(),
       create: vi.fn<StickerRepository["create"]>(),
+      findById: vi.fn<StickerRepository["findById"]>(),
+      update: vi.fn<StickerRepository["update"]>(),
     } satisfies Mocked<StickerRepository>,
   });
   let redis: ReturnType<typeof createMocks>["redis"];
@@ -242,6 +244,116 @@ describe("StickerService", () => {
       expect(repository.create.mock.invocationCallOrder[0]).toBeLessThan(
         redis.delete.mock.invocationCallOrder[0],
       );
+    });
+  });
+
+  describe("updateQuantity", () => {
+    const existing = (quantity: number, idTeam = 5) => ({
+      ...buildSticker(1, 7),
+      quantity,
+      idTeam,
+    });
+
+    it("increments the quantity and derives check from the SERVER-side value", async () => {
+      repository.findById.mockResolvedValue(existing(1));
+      repository.update.mockResolvedValue({
+        ...buildSticker(1, 7),
+        quantity: 2,
+        check: true,
+      });
+
+      const result = await service.updateQuantity(1, +1);
+
+      expect(result.quantity).toBe(2);
+      expect(repository.update).toHaveBeenCalledExactlyOnceWith(1, {
+        quantity: 2,
+        check: true,
+      });
+    });
+
+    it("keeps check true when the quantity lands exactly on 1", async () => {
+      repository.findById.mockResolvedValue(existing(2));
+      repository.update.mockResolvedValue({
+        ...buildSticker(1, 7),
+        quantity: 1,
+        check: true,
+      });
+
+      await service.updateQuantity(1, -1);
+
+      expect(repository.update).toHaveBeenCalledExactlyOnceWith(1, {
+        quantity: 1,
+        check: true,
+      });
+    });
+
+    it("clears check when the quantity drops to 0", async () => {
+      repository.findById.mockResolvedValue(existing(1));
+      repository.update.mockResolvedValue({
+        ...buildSticker(1, 7),
+        quantity: 0,
+        check: false,
+      });
+
+      await service.updateQuantity(1, -1);
+
+      expect(repository.update).toHaveBeenCalledExactlyOnceWith(1, {
+        quantity: 0,
+        check: false,
+      });
+    });
+
+    it("floors the quantity at 0 instead of going negative", async () => {
+      repository.findById.mockResolvedValue(existing(0));
+      repository.update.mockResolvedValue({
+        ...buildSticker(1, 7),
+        quantity: 0,
+        check: false,
+      });
+
+      await service.updateQuantity(1, -1);
+
+      expect(repository.update).toHaveBeenCalledExactlyOnceWith(1, {
+        quantity: 0,
+        check: false,
+      });
+    });
+
+    it("rejects with 404 before writing when the sticker does not exist", async () => {
+      repository.findById.mockResolvedValue(null);
+
+      await expect(service.updateQuantity(999, +1)).rejects.toMatchObject({
+        statusCode: 404,
+      });
+      expect(repository.update).not.toHaveBeenCalled();
+      expect(redis.delete).not.toHaveBeenCalled();
+    });
+
+    it("invalidates only the exact team key, never a stickers:filter:* entry", async () => {
+      repository.findById.mockResolvedValue(existing(1, 7));
+      repository.update.mockResolvedValue({
+        ...buildSticker(1, 7),
+        quantity: 2,
+        check: true,
+      });
+
+      await service.updateQuantity(1, +1);
+
+      expect(redis.delete).toHaveBeenCalledExactlyOnceWith("team:7:stickers");
+      const deletedKeys = redis.delete.mock.calls.map(([key]) => key);
+      expect(
+        deletedKeys.some((key) => key.startsWith("stickers:filter:")),
+      ).toBe(false);
+    });
+
+    it("does not invalidate the cache when the write fails", async () => {
+      repository.findById.mockResolvedValue(existing(1));
+      repository.update.mockRejectedValue(new Error("write failed"));
+
+      await expect(service.updateQuantity(1, +1)).rejects.toThrow(
+        "write failed",
+      );
+      expect(redis.delete).not.toHaveBeenCalled();
     });
   });
 });

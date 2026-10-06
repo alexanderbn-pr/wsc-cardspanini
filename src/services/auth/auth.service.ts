@@ -16,17 +16,22 @@ import argon2 from "argon2";
 export class AuthService {
   constructor(private readonly authRepository: AuthRepository) {}
 
-  async register(input: RegisterInput): Promise<User> {
+  // Devuelve Omit<User,"passwordHash"> (decisión E5): la redacción se proyecta
+  // en el service para que el compilador la garantice, no un controller que
+  // puede olvidarlo cuando User gane un campo sensible.
+  async register(input: RegisterInput): Promise<Omit<User, "passwordHash">> {
     const existingUser = await this.authRepository.findByEmail(input.email);
     if (existingUser) {
       throw new Error("User already exists");
     }
-    const passwordHash = await argon2.hash(input.password);
-    return this.authRepository.register({
+    const hash = await argon2.hash(input.password);
+    const user = await this.authRepository.register({
       email: input.email,
-      passwordHash: passwordHash,
+      passwordHash: hash,
       role: "Admin",
     });
+    const { passwordHash, ...userWithoutPassword } = user;
+    return userWithoutPassword;
   }
 
   async delete(id: number): Promise<void> {

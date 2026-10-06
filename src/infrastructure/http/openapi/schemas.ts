@@ -33,3 +33,13 @@ export const PositionResponseSchema = z
     name: z.string().openapi({ example: "Delantero" }),
   })
   .openapi("PositionResponse");
+
+// POST /auth/register. No incluye `passwordHash` a propósito: es el contrato
+// de E5 (la redacción se proyecta en AuthService.register, no en el controller).
+export const UserResponseSchema = z
+  .object({
+    id: z.number().openapi({ example: 1 }),
+    email: z.string().openapi({ example: "nuevo@wsc.local" }),
+    role: z.string().openapi({ example: "Admin" }),
+  })
+  .openapi("UserResponse");

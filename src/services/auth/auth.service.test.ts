@@ -77,7 +77,11 @@ describe("AuthService", () => {
         password: "s3cret",
       });
 
-      expect(result).toEqual(created);
+      expect(result).toEqual({
+        id: created.id,
+        email: created.email,
+        role: created.role,
+      });
       expect(repository.register).toHaveBeenCalledExactlyOnceWith({
         email: "nuevo@wsc.local",
         passwordHash: expect.stringMatching(/^\$argon2/),
@@ -86,6 +90,22 @@ describe("AuthService", () => {
 
       const { passwordHash } = repository.register.mock.calls[0][0];
       expect(passwordHash).not.toBe("s3cret");
+    });
+
+    // E5: la redacción se proyecta en el service. Se verifica AUSENCIA real
+    // (not.toHaveProperty) y no `toBeUndefined()`, que pasaria con un campo
+    // presente cuyo valor fuera undefined.
+    it("never exposes passwordHash on the returned user", async () => {
+      repository.findByEmail.mockResolvedValue(null);
+      repository.register.mockResolvedValue(created);
+
+      const result = await service.register({
+        email: "nuevo@wsc.local",
+        password: "s3cret",
+      });
+
+      expect(result).not.toHaveProperty("passwordHash");
+      expect(Object.hasOwn(result, "passwordHash")).toBe(false);
     });
 
     it("produces a hash that verifies against the plaintext password", async () => {

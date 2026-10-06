@@ -1,9 +1,6 @@
-
 import { describe, expect, it } from "vitest";
-import request from "supertest";
 import { jwtVerify } from "jose";
 
-import app from "../../app.js";
 import { TEAMS_CACHE_KEY } from "../../config/cache.js";
 import { getEnv } from "../../config/env.js";
 import {
@@ -14,19 +11,22 @@ import {
 } from "./helpers/auth.js";
 import {
   assertOnlyAllowedRequests,
+  httpDelete,
   httpGet,
   httpPost,
-  recordRequest,
   type AllowedRequest,
 } from "./helpers/http.js";
-
 
 const READ_ALLOWLIST: ReadonlyArray<AllowedRequest> = [
   { method: "GET", path: /^\/teams$/ },
   { method: "GET", path: /^\/teams\/\d+$/ },
   { method: "POST", path: /^\/auth\/login$/ },
+  // Escrituras ya cubiertas por este fichero: el registro crea el usuario que
+  // el DELETE posterior elimina, y el propio DELETE es una escritura. Sin
+  // estas entradas el assertion final "read allowlist" falla.
+  { method: "POST", path: /^\/auth\/register$/ },
+  { method: "DELETE", path: /^\/auth\/\d+$/ },
 ];
-
 
 async function discoverExistingTeamId(): Promise<number | undefined> {
   try {
@@ -42,7 +42,6 @@ async function discoverExistingTeamId(): Promise<number | undefined> {
 }
 
 const discoveredTeamId = await discoverExistingTeamId();
-
 
 const hasRealLoginCredentials = Boolean(
   process.env.E2E_TEST_EMAIL && process.env.E2E_TEST_PASSWORD,
@@ -223,22 +222,64 @@ describe("GET /teams E2E", () => {
       expect(response.status).toBe(401);
     });
 
-    it.skip("POST /auth/register must not expose the argon2 passwordHash", async () => {
+    // Capacidad user-register-redaction (spec): el contrato fija 200, no 201.
+    // El email es único por corrida porque register rechaza duplicados con un
+    // error que rompería una segunda ejecución del suite.
+    it("POST /auth/register must not expose the argon2 passwordHash", async () => {
       const response = await httpPost("/auth/register", {
-        email: "e2e-leak@example.com",
+        email: `e2e-leak-${Date.now()}@example.com`,
         password: "Aa1!leak-probe",
       });
 
-      expect(response.status).toBe(201);
+      expect(response.status).toBe(200);
+      // Ausencia real, no `toBeUndefined()`: un campo presente con valor
+      // undefined pasaría la segunda aserción pero no esta.
       expect(response.body).not.toHaveProperty("passwordHash");
+      expect(Object.hasOwn(response.body, "passwordHash")).toBe(false);
     });
 
-    it.skip("DELETE /auth/delete/:id must delete, today the route is registered as .get", async () => {
-      recordRequest("DELETE", `/auth/delete/${TOKEN_SUBJECT_ID}`);
-      const response = await request(app).delete(
-        `/auth/delete/${TOKEN_SUBJECT_ID}`,
+    // Capacidad user-self-delete. Crea su PROPIO usuario en lugar de borrar
+    // TOKEN_SUBJECT_ID (id=1, fijo): eso destruiría datos compartidos y haría
+    // que la segunda corrida fallara con 404 porque el usuario ya no existiría.
+    it("DELETE /auth/:id deletes the caller's own account", async () => {
+      const created = await httpPost("/auth/register", {
+        email: `e2e-self-delete-${Date.now()}@example.com`,
+        password: "Aa1!self-del",
+      });
+      expect(created.status).toBe(200);
+      const id = created.body.id as number;
+
+      const response = await httpDelete(
+        `/auth/${id}`,
+        `Bearer ${await createToken({ subjectId: id })}`,
       );
-      expect(response.status).toBe(404);
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({ deleted: true });
+    });
+
+    // requireSelf compara el id del path con el sujeto del token ANTES de
+    // buscar en la BD, así que el 403 no depende de que el usuario exista.
+    it("DELETE /auth/:id returns 403 when the path id is not the token subject", async () => {
+      const response = await httpDelete(
+        "/auth/8",
+        `Bearer ${await createToken({ subjectId: 7 })}`,
+      );
+
+      expect(response.status).toBe(403);
+      expect(response.body).toEqual({
+        status: "error",
+        message: "You can only delete your own account",
+      });
+    });
+
+    it("DELETE /auth/:id returns 403 for an unknown id instead of 404", async () => {
+      const response = await httpDelete(
+        "/auth/999",
+        `Bearer ${await createToken({ subjectId: 7 })}`,
+      );
+
+      expect(response.status).toBe(403);
     });
   });
 

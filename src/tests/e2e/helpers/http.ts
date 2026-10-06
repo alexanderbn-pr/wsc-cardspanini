@@ -35,6 +35,15 @@ export function httpPost(path: string, body: object, authorization?: string) {
   return pending;
 }
 
+export function httpDelete(path: string, authorization?: string) {
+  recordRequest("DELETE", path);
+  const pending = request(app).delete(path);
+  if (authorization !== undefined) {
+    pending.set("Authorization", authorization);
+  }
+  return pending;
+}
+
 export function assertOnlyAllowedRequests(
   allowlist: ReadonlyArray<AllowedRequest>,
 ): void {

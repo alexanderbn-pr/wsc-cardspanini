@@ -1,4 +1,4 @@
-import type { Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { Sticker } from "../../domain/entities/Sticker.js";
 import { StickerFilters } from "../../modules/stickers.js";
 import { StickerRepository } from "../../domain/repositories/sticker.repository.js";
@@ -74,5 +74,44 @@ export class PrismaStickerRepository implements StickerRepository {
     );
 
     return stickers.map(mapSticker);
+  }
+
+  async findById(id: number): Promise<(Sticker & { idTeam: number }) | null> {
+    const row = await pRetry(
+      () => prisma.sticker.findFirst({ where: { id }, ...WITH_POSITION }),
+      DB_RETRY_CONFIG,
+    );
+    if (!row) return null;
+    // `mapSticker` proyecta la entidad de dominio, que no expone el equipo;
+    // aquí lo reañadimos porque el caller necesita invalidar la cache del team.
+    return { ...mapSticker(row), idTeam: row.idTeam };
+  }
+
+  async update(
+    id: number,
+    data: { quantity: number; check: boolean },
+  ): Promise<Sticker | null> {
+    try {
+      const updated = await pRetry(
+        () =>
+          prisma.sticker.update({
+            where: { id },
+            data: { quantity: data.quantity, check: data.check },
+            ...WITH_POSITION,
+          }),
+        DB_WRITE_RETRY_CONFIG,
+      );
+      return mapSticker(updated);
+    } catch (error) {
+      // P2025: el registro ya no existe (carrera). Se traduce a null en lugar
+      // de filtrar un error de Prisma hacia el dominio.
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === "P2025"
+      ) {
+        return null;
+      }
+      throw error;
+    }
   }
 }

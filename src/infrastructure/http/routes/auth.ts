@@ -11,11 +11,10 @@ export default function manageAuthRouter(
   authService: AuthService,
 ): Router {
   const protectedRoutes = createProtectedRouter(authService);
-  protectedRoutes.get(
-    "/delete/:id",
-    requireSelf,
-    asyncHandler(controller.delete),
-  );
+  // DELETE /auth/:id — antes era GET /auth/delete/:id. `requireSelf` compara
+  // `req.params.id` con el sujeto del token (403 si difieren, incluso cuando
+  // el usuario no existe: rechaza antes de buscar).
+  protectedRoutes.delete("/:id", requireSelf, asyncHandler(controller.delete));
 
   const router = Router();
   router.post(

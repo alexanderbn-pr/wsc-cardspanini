@@ -88,6 +88,42 @@ export class SupabaseStickerRepository implements StickerRepository {
     return (data ?? []).map(this.mapSticker);
   }
 
+  async findById(id: number): Promise<(Sticker & { idTeam: number }) | null> {
+    const { data, error } = await this.client
+      .from("Stickers")
+      .select("*, Position(name)")
+      .eq("id", id)
+      .maybeSingle();
+
+    if (error) {
+      throw new Error(`Failed to fetch sticker: ${error.message}`);
+    }
+    if (!data) return null;
+
+    // El mapper de dominio descarta idTeam; aquí se reañade porque el caller
+    // necesita invalidar la cache del equipo (mismo motivo que en el adapter Prisma).
+    return { ...this.mapSticker(data), idTeam: data.idTeam };
+  }
+
+  async update(
+    id: number,
+    data: { quantity: number; check: boolean },
+  ): Promise<Sticker | null> {
+    const { data: updated, error } = await this.client
+      .from("Stickers")
+      .update({ quantity: data.quantity, check: data.check })
+      .eq("id", id)
+      .select("*, Position(name)")
+      .maybeSingle();
+
+    if (error) {
+      throw new Error(`Failed to update sticker: ${error.message}`);
+    }
+    if (!updated) return null;
+
+    return this.mapSticker(updated);
+  }
+
   private mapSticker(row: SupabaseStickerRow): Sticker {
     return {
       id: row.id,
