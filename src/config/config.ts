@@ -5,4 +5,11 @@ export const DEFAULTS: DEFAULTS_TYPE = {
   ORDER: "asc",
 };
 
-export const ACCEPTED_ORIGINS: ACCEPTED_ORIGINS_TYPE = ["http://localhost:*"];
+export const ACCEPTED_ORIGINS: ACCEPTED_ORIGINS_TYPE = [
+  "http://localhost",
+  "http://127.0.0.1",
+  "http://localhost:3000",
+  "http://localhost:5173",
+  "http://localhost:8080",
+  "http://localhost:4200",
+];
