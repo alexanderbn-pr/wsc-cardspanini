@@ -1,4 +1,6 @@
 import express from "express";
+import path from "path";
+import { fileURLToPath } from "url";
 import { loadEnv } from "./config/env.js";
 import { errorHandler } from "./infrastructure/http/middlewares/errorHandler/errorHandler.js";
 import { corsMiddleware } from "./infrastructure/http/middlewares/cors.js";
@@ -10,6 +12,9 @@ import { logger } from "./infrastructure/logger/logger.js";
 import healthRouter from "./infrastructure/http/routes/health.js";
 import { openApiDocument } from "./infrastructure/http/openapi/document.js";
 import { apiRateLimiter } from "./infrastructure/http/rate-limit.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 // Load env BEFORE any adapter that needs it
 loadEnv();
 
@@ -105,6 +110,16 @@ app.use("/positions", positionsRouter);
 app.use("/auth", authRouter);
 
 // Swagger UI and OpenAPI JSON
+// Serve Swagger UI static files explicitly for better compatibility in serverless environments (Vercel)
+// index: false — like swagger-ui-express' own asset middleware — so the root
+// /api/docs/ keeps falling through to swaggerUi.setup() (which renders THIS
+// API's document) instead of swagger-ui-dist's default petstore index.html.
+app.use(
+  "/api/docs",
+  express.static(path.join(__dirname, "../node_modules/swagger-ui-dist"), {
+    index: false,
+  }),
+);
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(openApiDocument));
 app.get("/api/openapi.json", (req, res) => res.json(openApiDocument));
 
