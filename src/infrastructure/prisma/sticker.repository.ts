@@ -7,15 +7,6 @@ import { DB_RETRY_CONFIG, DB_WRITE_RETRY_CONFIG } from "../../config/retry.js";
 import { mapSticker, WITH_POSITION } from "./sticker.mapper.js";
 import pRetry from "p-retry";
 
-/**
- * Prisma-based implementation of StickerRepository.
- * Handles ONLY sticker operations.
- *
- * Las relaciones se cargan con `include`. Antes se usaban $queryRaw con
- * LEFT JOIN manuales; la causa real era que "Stickers"."positionId" era int4
- * mientras "Position"."id" era int8, y Prisma resolvía esa relación a null en
- * silencio. La BD está alineada a int4, así que `include` es fiable.
- */
 export class PrismaStickerRepository implements StickerRepository {
   async getByTeamId(teamId: number): Promise<Sticker[]> {
     const rows = await pRetry(
@@ -82,8 +73,6 @@ export class PrismaStickerRepository implements StickerRepository {
       DB_RETRY_CONFIG,
     );
     if (!row) return null;
-    // `mapSticker` proyecta la entidad de dominio, que no expone el equipo;
-    // aquí lo reañadimos porque el caller necesita invalidar la cache del team.
     return { ...mapSticker(row), idTeam: row.idTeam };
   }
 
@@ -103,8 +92,6 @@ export class PrismaStickerRepository implements StickerRepository {
       );
       return mapSticker(updated);
     } catch (error) {
-      // P2025: el registro ya no existe (carrera). Se traduce a null en lugar
-      // de filtrar un error de Prisma hacia el dominio.
       if (
         error instanceof Prisma.PrismaClientKnownRequestError &&
         error.code === "P2025"
