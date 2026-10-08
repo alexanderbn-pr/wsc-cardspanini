@@ -70,7 +70,7 @@ app.use(
 app.use(apiRateLimiter);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(helmet());
+app.use((helmet as unknown as () => express.RequestHandler)());
 
 const redisService = new RedisService();
 // -- DEPENDENCY INJECTION (Composition Root) --
