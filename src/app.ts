@@ -7,9 +7,7 @@ import { corsMiddleware } from "./infrastructure/http/middlewares/cors.js";
 import { requestIdMiddleware } from "./infrastructure/http/middlewares/requestId.js";
 import { pinoHttp } from "pino-http";
 import swaggerUi from "swagger-ui-express";
-import { createRequire } from "module";
-const require = createRequire(import.meta.url);
-const helmetFn = require("helmet");
+import helmet from "helmet";
 import { logger } from "./infrastructure/logger/logger.js";
 import healthRouter from "./infrastructure/http/routes/health.js";
 import { openApiDocument } from "./infrastructure/http/openapi/document.js";
@@ -72,7 +70,7 @@ app.use(
 app.use(apiRateLimiter);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(helmetFn());
+app.use(helmet());
 
 const redisService = new RedisService();
 // -- DEPENDENCY INJECTION (Composition Root) --
