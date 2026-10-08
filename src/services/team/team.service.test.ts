@@ -122,4 +122,29 @@ describe("TeamService", () => {
       expect(redis.set).not.toHaveBeenCalled();
     });
   });
+
+  describe("invalidateCaches", () => {
+    it("deletes both the global list key and the individual team key", async () => {
+      await service.invalidateCaches(7);
+
+      expect(redis.delete).toHaveBeenCalledTimes(2);
+      const deletedKeys = redis.delete.mock.calls.map(([key]) => key);
+      expect(deletedKeys).toContain("teams");
+      expect(deletedKeys).toContain("team:7:");
+      expect(repository.getAll).not.toHaveBeenCalled();
+      expect(repository.getById).not.toHaveBeenCalled();
+    });
+
+    it("never touches a stickers:filter:* or stickers list key", async () => {
+      await service.invalidateCaches(7);
+
+      const deletedKeys = redis.delete.mock.calls.map(([key]) => key);
+      expect(
+        deletedKeys.some(
+          (key) =>
+            key.startsWith("stickers:filter:") || key.endsWith(":stickers"),
+        ),
+      ).toBe(false);
+    });
+  });
 });

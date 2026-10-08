@@ -88,10 +88,12 @@ export class StickerService {
       throw new AppError(404, `Sticker with id ${id} not found`);
     }
 
-    // E3: se invalida únicamente la clave exacta del equipo. Las claves
-    // `stickers:filter:*` son un keyspace combinatorio y se resuelven por TTL.
     const cacheKey = `team:${existing.idTeam}:stickers`;
     await this.redisService.delete(cacheKey);
+    // Además, TODA la cache de equipos (la lista global y la individual
+    // embeben stickers[]; sin esto, GET /teams serviría cantidades
+    // desactualizadas durante el TTL de 30s).
+    await this.teamService.invalidateCaches(existing.idTeam);
     logger.debug(
       { id, idTeam: existing.idTeam, quantity, check },
       "Cache invalidated after sticker quantity update",
@@ -111,6 +113,9 @@ export class StickerService {
     // Invalidate cache after create
     const cacheKey = `team:${teamId}:stickers`;
     await this.redisService.delete(cacheKey);
+    // Mismo motivo que en updateQuantity: los equipos cacheados embeben
+    // stickers[], así que hay que invalidar la caché de equipos completa.
+    await this.teamService.invalidateCaches(teamId);
     logger.debug({ teamId }, "Cache invalidated after sticker creation");
 
     return createdSticker;

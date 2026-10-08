@@ -38,10 +38,6 @@ export class StickerController {
     const newSticker = await this.stickerService.create(sticker, idTeam);
     res.status(201).json(newSticker);
   };
-
-  // PATCH /stickers/:id — el id ya viene validado por UpdateStickerSchema,
-  // que lo coacciona a número entero positivo (400 en caso contrario). El 404
-  // lo lanza el service y lo traduce el errorHandler.
   updateQuantity = async (req: Request, res: Response) => {
     const { delta } = req.body;
     const sticker = await this.stickerService.updateQuantity(

@@ -9,7 +9,7 @@ import { StickerFilters } from "../../modules/stickers.js";
 import { AppError } from "../../infrastructure/http/middlewares/errorHandler/errorHandler.js";
 
 type RedisDouble = Pick<RedisService, "get" | "set" | "delete">;
-type TeamServiceDouble = Pick<TeamService, "getById">;
+type TeamServiceDouble = Pick<TeamService, "getById" | "invalidateCaches">;
 
 describe("StickerService", () => {
   const createMocks = () => ({
@@ -21,6 +21,7 @@ describe("StickerService", () => {
 
     teamService: {
       getById: vi.fn<TeamService["getById"]>(),
+      invalidateCaches: vi.fn<TeamService["invalidateCaches"]>(),
     } satisfies TeamServiceDouble,
 
     repository: {
@@ -200,6 +201,7 @@ describe("StickerService", () => {
       });
       expect(repository.create).not.toHaveBeenCalled();
       expect(redis.delete).not.toHaveBeenCalled();
+      expect(teamService.invalidateCaches).not.toHaveBeenCalled();
     });
 
     it("invalidates the team's individual sticker key after creating", async () => {
@@ -208,6 +210,14 @@ describe("StickerService", () => {
       await service.create(buildSticker(10, 7), 5);
 
       expect(redis.delete).toHaveBeenCalledExactlyOnceWith("team:5:stickers");
+    });
+
+    it("delegates full team cache invalidation to TeamService (teams + team:id embed stickers)", async () => {
+      repository.create.mockResolvedValue(buildSticker(10, 7));
+
+      await service.create(buildSticker(10, 7), 5);
+
+      expect(teamService.invalidateCaches).toHaveBeenCalledExactlyOnceWith(5);
     });
 
     // Este test FIJA el comportamiento actual, no lo valida como correcto.
@@ -327,6 +337,7 @@ describe("StickerService", () => {
       });
       expect(repository.update).not.toHaveBeenCalled();
       expect(redis.delete).not.toHaveBeenCalled();
+      expect(teamService.invalidateCaches).not.toHaveBeenCalled();
     });
 
     it("invalidates only the exact team key, never a stickers:filter:* entry", async () => {
@@ -344,9 +355,12 @@ describe("StickerService", () => {
       expect(
         deletedKeys.some((key) => key.startsWith("stickers:filter:")),
       ).toBe(false);
+      // La caché de equipos (lista global "teams" + "team:7:") se limpia
+      // delegando en TeamService.invalidateCaches.
+      expect(teamService.invalidateCaches).toHaveBeenCalledExactlyOnceWith(7);
     });
 
-    it("does not invalidate the cache when the write fails", async () => {
+    it("does not invalidate any cache when the write fails", async () => {
       repository.findById.mockResolvedValue(existing(1));
       repository.update.mockRejectedValue(new Error("write failed"));
 
@@ -354,6 +368,7 @@ describe("StickerService", () => {
         "write failed",
       );
       expect(redis.delete).not.toHaveBeenCalled();
+      expect(teamService.invalidateCaches).not.toHaveBeenCalled();
     });
   });
 });

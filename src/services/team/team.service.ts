@@ -49,4 +49,12 @@ export class TeamService {
     }
     return team;
   }
+
+  async invalidateCaches(teamId: number): Promise<void> {
+    await Promise.all([
+      this.redisService.delete(TEAMS_CACHE_KEY),
+      this.redisService.delete(teamCacheKey(teamId)),
+    ]);
+    logger.debug({ teamId }, "Team caches invalidated");
+  }
 }

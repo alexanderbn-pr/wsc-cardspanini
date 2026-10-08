@@ -3,7 +3,12 @@ import "../openapi/zod-extend.js";
 
 export const paginationSchema = z
   .object({
-    page: z.coerce.number().int().positive().default(0).openapi({ example: 0 }),
+    page: z.coerce
+      .number()
+      .int()
+      .nonnegative()
+      .default(0)
+      .openapi({ example: 0 }),
     limit: z.coerce
       .number()
       .int()
