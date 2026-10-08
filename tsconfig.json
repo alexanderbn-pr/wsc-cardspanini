@@ -12,20 +12,7 @@
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
-    "baseUrl": ".",
-    "paths": {
-      "@supabase/supabase-js": [
-        "./node_modules/@supabase/supabase-js/dist/index.d.mts"
-      ],
-      "argon2": ["./node_modules/argon2/argon2.d.cts"],
-      "express-rate-limit": [
-        "./node_modules/express-rate-limit/dist/index.d.mts"
-      ],
-      "helmet": ["./node_modules/helmet/index.d.mts"],
-      "pdf-parse": ["./node_modules/pdf-parse/dist/pdf-parse/cjs/index.d.cts"],
-      "pdf2json": ["./node_modules/pdf2json/dist/pdfparser.d.ts"],
-      "zod": ["./node_modules/zod/index.d.ts"]
-    }
+    "baseUrl": "."
   },
   "include": ["src/**/*.ts", "tests/**/*.ts", "api/**/*.ts"],
   "exclude": ["node_modules", "dist"]
