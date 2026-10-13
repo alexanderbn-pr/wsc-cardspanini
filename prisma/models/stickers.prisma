@@ -8,6 +8,9 @@ model Sticker {
   quantity   Int      @default(0)
   idTeam     Int
   team       Team     @relation(fields: [idTeam], references: [id])
+  // int8 en la DB real (int4 → BigInt es la excepción documentada en base.prisma).
+  editionId  BigInt?  @db.BigInt
+  edition    Edition? @relation(fields: [editionId], references: [id])
 
   @@map("Stickers")
 }

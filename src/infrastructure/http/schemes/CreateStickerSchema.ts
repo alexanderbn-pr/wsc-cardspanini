@@ -10,6 +10,13 @@ export const CreateStickerSchema = z
             number: z.string().openapi({ example: "001" }),
             name: z.string().openapi({ example: "Lamine Yamal" }),
             positionId: z.number().int().positive().openapi({ example: 1 }),
+            editionId: z
+              .number()
+              .int()
+              .positive()
+              .nullable()
+              .default(null)
+              .openapi({ example: 1 }),
             // Valor por defecto
             quantity: z.number().default(0).openapi({ example: 0 }),
             check: z.boolean().default(false).openapi({ example: false }),

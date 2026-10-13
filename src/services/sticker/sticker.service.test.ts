@@ -45,6 +45,7 @@ describe("StickerService", () => {
     position: `Position ${positionId}`,
     check: false,
     quantity: 1,
+    editionId: null,
   });
 
   const team: Sticker[] = [

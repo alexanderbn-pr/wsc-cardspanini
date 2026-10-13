@@ -6,4 +6,5 @@ export interface Sticker {
   position: string;
   check: boolean;
   quantity: number;
+  editionId: number | null;
 }

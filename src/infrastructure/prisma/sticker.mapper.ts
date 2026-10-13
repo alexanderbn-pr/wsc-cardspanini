@@ -18,6 +18,10 @@ export const WITH_POSITION = { include: { position: true } } as const;
  *
  * El dominio expone `position` como string plano, mientras Prisma devuelve la
  * entidad relacionada. Una posición ausente se degrada a "" en lugar de null.
+ *
+ * `editionId` es int8 en la DB real, así que Prisma lo entrega como BigInt;
+ * se convierte a Number aquí — único punto de fuga — antes de `res.json()`,
+ * que lanzaría si recibiera un BigInt.
  */
 export function mapSticker(sticker: StickerWithPosition): Sticker {
   return {
@@ -28,5 +32,6 @@ export function mapSticker(sticker: StickerWithPosition): Sticker {
     position: sticker.position?.name ?? "",
     check: sticker.check,
     quantity: sticker.quantity,
+    editionId: sticker.editionId === null ? null : Number(sticker.editionId),
   };
 }

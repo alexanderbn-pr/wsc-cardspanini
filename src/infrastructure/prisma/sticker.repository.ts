@@ -32,6 +32,7 @@ export class PrismaStickerRepository implements StickerRepository {
             check: sticker.check,
             quantity: sticker.quantity,
             idTeam: teamId,
+            editionId: sticker.editionId ?? null,
           },
           ...WITH_POSITION,
         }),

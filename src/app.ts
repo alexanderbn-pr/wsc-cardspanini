@@ -28,6 +28,7 @@ loadEnv();
 import { PrismaTeamRepository } from "./infrastructure/prisma/team/team.repository.js";
 import { PrismaStickerRepository } from "./infrastructure/prisma/sticker.repository.js";
 import { PrismaPositionRepository } from "./infrastructure/prisma/position.repository.js";
+import { PrismaEditionRepository } from "./infrastructure/prisma/edition.repository.js";
 import { PrismaAuthRepository } from "./infrastructure/prisma/auth.repository.js";
 import { RedisService } from "./infrastructure/redis/redis.service.js";
 
@@ -35,17 +36,20 @@ import { RedisService } from "./infrastructure/redis/redis.service.js";
 import { TeamService } from "./services/team/team.service.js";
 import { StickerService } from "./services/sticker/sticker.service.js";
 import { PositionService } from "./services/position/position.service.js";
+import { EditionService } from "./services/edition/edition.service.js";
 import { AuthService } from "./services/auth/auth.service.js";
 
 // Controllers
 import { TeamController } from "./infrastructure/http/controllers/teams/teams.controller.js";
 import { StickerController } from "./infrastructure/http/controllers/stickers.controller.js";
 import { PositionController } from "./infrastructure/http/controllers/positions.controller.js";
+import { EditionController } from "./infrastructure/http/controllers/editions.controller.js";
 
 // Route factories
 import createStickersRouter from "./infrastructure/http/routes/stickers.js";
 import createTeamsRouter from "./infrastructure/http/routes/teams.js";
 import createPositionsRouter from "./infrastructure/http/routes/positions.js";
+import createEditionsRouter from "./infrastructure/http/routes/editions.js";
 import manageAuthRouter from "./infrastructure/http/routes/auth.js";
 
 import { AuthController } from "./infrastructure/http/controllers/auth.controller.js";
@@ -79,6 +83,7 @@ const redisService = new RedisService();
 const teamRepository = new PrismaTeamRepository();
 const stickerRepository = new PrismaStickerRepository();
 const positionRepository = new PrismaPositionRepository();
+const editionRepository = new PrismaEditionRepository();
 const authRepository = new PrismaAuthRepository();
 
 // Application services
@@ -89,17 +94,20 @@ const stickerService = new StickerService(
   redisService,
 );
 const positionService = new PositionService(positionRepository, redisService);
+const editionService = new EditionService(editionRepository, redisService);
 const authService = new AuthService(authRepository);
 
 // Controllers
 const teamController = new TeamController(teamService);
 const stickerController = new StickerController(stickerService);
 const positionController = new PositionController(positionService);
+const editionController = new EditionController(editionService);
 const authController = new AuthController(authService);
 // Routes (factory pattern)
 const stickersRouter = createStickersRouter(stickerController, authService);
 const teamsRouter = createTeamsRouter(teamController, authService);
 const positionsRouter = createPositionsRouter(positionController, authService);
+const editionsRouter = createEditionsRouter(editionController, authService);
 const authRouter = manageAuthRouter(authController, authService);
 
 // -- ROUTES --
@@ -107,6 +115,7 @@ app.use("/api", healthRouter);
 app.use("/stickers", stickersRouter);
 app.use("/teams", teamsRouter);
 app.use("/positions", positionsRouter);
+app.use("/editions", editionsRouter);
 app.use("/auth", authRouter);
 
 // Swagger UI and OpenAPI JSON

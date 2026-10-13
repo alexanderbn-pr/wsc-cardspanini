@@ -1,0 +1,12 @@
+// EXCEPCIÓN al invariante int4 de base.prisma: Edition.id y Stickers.editionId
+// son int8 en la DB real. DEBEN declararse BigInt (id y FK del MISMO tipo) o el
+// include se desajusta en silencio. Los mappers hacen Number() antes de res.json().
+model Edition {
+  id           BigInt   @id @db.BigInt
+  code         String
+  description  String?
+  abbreviation String?
+  stickers     Sticker[]
+
+  @@map("Edition")
+}

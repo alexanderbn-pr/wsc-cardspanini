@@ -72,6 +72,7 @@ export class JsonTeamRepository implements TeamRepository {
       position: raw.position,
       check: false, // Default: not collected yet
       quantity: 0, // Default: none owned
+      editionId: null, // No FK in JSON source
     };
   }
 }

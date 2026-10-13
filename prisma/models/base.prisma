@@ -10,6 +10,12 @@
 // Reglas: un id y su FK deben ser del MISMO tipo, aqui siempre Int/int4.
 // Si cambias un id a BigInt, cambia tambien TODAS sus FK, o el include
 // devolvera null sin avisar. Migracion de referencia: prisma/sql/001-*.sql
+//
+// EXCEPCION SANCIONADA (2026-10-13): "Edition"."id" y "Stickers"."editionId"
+// son int8 en la DB REAL, asi que se declaran BigInt @db.BigInt (id y FK del
+// MISMO tipo, invariante respetado). El cliente Prisma los devuelve como
+// BigInt; los mappers (prisma/*.mapper.ts) hacen Number() antes de res.json()
+// o la serializacion lanza. NO es una migracion: la tabla ya existe asi.
 
 generator client {
   provider = "prisma-client-js"

@@ -12,6 +12,7 @@ import {
   StickerResponseSchema,
   ErrorResponseSchema,
   PositionResponseSchema,
+  EditionResponseSchema,
   UserResponseSchema,
 } from "./schemas.js";
 
@@ -327,6 +328,24 @@ registry.registerPath({
       content: {
         "application/json": {
           schema: PositionResponseSchema.array(),
+        },
+      },
+    },
+  },
+});
+
+registry.registerPath({
+  method: "get",
+  path: "/editions",
+  summary: "Get all editions",
+  description: "Returns all sticker editions ordered by id",
+  security: [{ bearerAuth: [] }],
+  responses: {
+    200: {
+      description: "Successful response",
+      content: {
+        "application/json": {
+          schema: EditionResponseSchema.array(),
         },
       },
     },

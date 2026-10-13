@@ -11,6 +11,12 @@
 // Reglas: un id y su FK deben ser del MISMO tipo, aqui siempre Int/int4.
 // Si cambias un id a BigInt, cambia tambien TODAS sus FK, o el include
 // devolvera null sin avisar. Migracion de referencia: prisma/sql/001-*.sql
+//
+// EXCEPCION SANCIONADA (2026-10-13): "Edition"."id" y "Stickers"."editionId"
+// son int8 en la DB REAL, asi que se declaran BigInt @db.BigInt (id y FK del
+// MISMO tipo, invariante respetado). El cliente Prisma los devuelve como
+// BigInt; los mappers (prisma/*.mapper.ts) hacen Number() antes de res.json()
+// o la serializacion lanza. NO es una migracion: la tabla ya existe asi.
 
 generator client {
   provider = "prisma-client-js"
@@ -48,6 +54,9 @@ model Sticker {
   quantity   Int      @default(0)
   idTeam     Int
   team       Team     @relation(fields: [idTeam], references: [id])
+  // int8 en la DB real (int4 → BigInt es la excepción documentada en base.prisma).
+  editionId  BigInt?  @db.BigInt
+  edition    Edition? @relation(fields: [editionId], references: [id])
 
   @@map("Stickers")
 }
@@ -57,4 +66,16 @@ model Position {
   stickers Sticker[]
 
   @@map("Position")
+}
+// EXCEPCIÓN al invariante int4 de base.prisma: Edition.id y Stickers.editionId
+// son int8 en la DB real. DEBEN declararse BigInt (id y FK del MISMO tipo) o el
+// include se desajusta en silencio. Los mappers hacen Number() antes de res.json().
+model Edition {
+  id           BigInt   @id @db.BigInt
+  code         String
+  description  String?
+  abbreviation String?
+  stickers     Sticker[]
+
+  @@map("Edition")
 }

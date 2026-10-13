@@ -12,6 +12,7 @@ interface SupabaseStickerRow {
   check: boolean;
   quantity: number;
   idTeam: number;
+  editionId: number | null;
   Position?: { name: string } | null;
 }
 
@@ -120,6 +121,7 @@ export class SupabaseTeamRepository implements TeamRepository {
       position: row.Position?.name ?? "",
       check: row.check,
       quantity: row.quantity,
+      editionId: row.editionId ?? null,
     };
   }
 }
