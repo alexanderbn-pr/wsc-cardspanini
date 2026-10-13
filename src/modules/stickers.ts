@@ -4,6 +4,7 @@ export interface StickerFilters {
   number?: string;
   name?: string;
   positionId?: number;
+  editionId?: number;
   check?: boolean;
   quantity?: number;
   page: number;

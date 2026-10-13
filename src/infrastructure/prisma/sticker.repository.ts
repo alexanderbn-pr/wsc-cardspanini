@@ -50,6 +50,7 @@ export class PrismaStickerRepository implements StickerRepository {
     if (filters.number !== undefined) where.number = filters.number;
     if (filters.name !== undefined) where.name = filters.name;
     if (filters.positionId !== undefined) where.positionId = filters.positionId;
+    if (filters.editionId !== undefined) where.editionId = filters.editionId;
     if (filters.check !== undefined) where.check = filters.check;
     if (filters.quantity !== undefined) where.quantity = filters.quantity;
 

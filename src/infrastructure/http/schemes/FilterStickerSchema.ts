@@ -28,6 +28,7 @@ export const stickerFiltersSchema = z
       .positive()
       .optional()
       .openapi({ example: 1 }),
+    editionId: z.coerce.number().int().optional().openapi({ example: 2 }),
     check: z
       .enum(["true", "false"])
       .transform((v) => v === "true")
