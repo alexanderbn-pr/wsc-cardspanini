@@ -12,4 +12,5 @@ export const ACCEPTED_ORIGINS: ACCEPTED_ORIGINS_TYPE = [
   "http://localhost:5173",
   "http://localhost:8080",
   "http://localhost:4200",
+  "https://spa-cards-panini-psi.vercel.app",
 ];
