@@ -18,7 +18,7 @@
     "typecheck": "tsc --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "prisma:merge": "prisma-merge-schema -d prisma/models/base.prisma -d prisma/models/teams.prisma -d prisma/models/user.prisma -d prisma/models/stickers.prisma -d prisma/models/positions.prisma -d prisma/models/edition.prisma -o prisma/schema.prisma",
+    "prisma:merge": "prisma-merge-schema -d prisma/models/base.prisma -d prisma/models/teams.prisma -d prisma/models/user.prisma -d prisma/models/stickers.prisma -d prisma/models/positions.prisma -d prisma/models/edition.prisma -d prisma/models/collections.prisma -o prisma/schema.prisma",
     "prisma:generate": "npm run prisma:merge && npx prisma generate",
     "prisma:studio": "npm run prisma:merge && npx prisma studio",
     "postinstall": "prisma skills sync || exit 0"

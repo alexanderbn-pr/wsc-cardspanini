@@ -35,8 +35,8 @@ describe("TeamService", () => {
 
   describe("getAll", () => {
     const teams: Team[] = [
-      { id: 1, name: "Valencia CF", stickers: [] },
-      { id: 2, name: "Valencia Mestalla", stickers: [] },
+      { id: 1, name: "Valencia CF", collectionId: null, stickers: [] },
+      { id: 2, name: "Valencia Mestalla", collectionId: null, stickers: [] },
     ];
 
     it("returns every team from the cache without querying the repository", async () => {
@@ -86,6 +86,7 @@ describe("TeamService", () => {
     const team: Team = {
       id: 1,
       name: "Valencia CF",
+      collectionId: null,
       stickers: [],
     };
 

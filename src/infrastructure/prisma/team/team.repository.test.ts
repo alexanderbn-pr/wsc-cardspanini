@@ -19,11 +19,13 @@ describe("PrismaTeamRepository", () => {
     {
       id: 1,
       name: "Valencia CF",
+      collectionId: null,
       stickers: [],
     },
     {
       id: 2,
       name: "Real Madrid",
+      collectionId: null,
       stickers: [],
     },
   ];
@@ -44,11 +46,13 @@ describe("PrismaTeamRepository", () => {
         {
           id: 1,
           name: "Valencia CF",
+          collectionId: null,
           stickers: [],
         },
         {
           id: 2,
           name: "Real Madrid",
+          collectionId: null,
           stickers: [],
         },
       ]);
@@ -80,6 +84,7 @@ describe("PrismaTeamRepository", () => {
       expect(result).toEqual({
         id: 1,
         name: "Valencia CF",
+        collectionId: null,
         stickers: [],
       });
 
@@ -121,6 +126,7 @@ describe("PrismaTeamRepository", () => {
       expect(result).toEqual({
         id: 1,
         name: "Valencia CF",
+        collectionId: null,
         stickers: [],
       });
       expect(prisma.team.findUnique).toHaveBeenCalledTimes(2);

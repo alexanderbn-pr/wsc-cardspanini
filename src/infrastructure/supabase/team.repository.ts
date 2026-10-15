@@ -19,6 +19,7 @@ interface SupabaseStickerRow {
 interface SupabaseTeamRow {
   id: number;
   name: string;
+  collectionId: number | null;
 }
 
 /**
@@ -33,11 +34,17 @@ export class SupabaseTeamRepository implements TeamRepository {
     this.client = createClient(env.SUPABASE_URL, env.SUPABASE_ANON_KEY);
   }
 
-  async getAll(): Promise<Team[]> {
-    const { data: teams, error: teamsError } = await this.client
+  async getAll(collectionId?: number): Promise<Team[]> {
+    const query = this.client
       .from("Teams")
       .select("*")
       .order("id", { ascending: true });
+
+    if (collectionId !== undefined) {
+      query.eq("collectionId", collectionId);
+    }
+
+    const { data: teams, error: teamsError } = await query;
 
     if (teamsError) {
       throw new Error(`Failed to fetch teams: ${teamsError.message}`);
@@ -61,6 +68,7 @@ export class SupabaseTeamRepository implements TeamRepository {
     return teams.map((team: SupabaseTeamRow) => ({
       id: team.id,
       name: team.name,
+      collectionId: team.collectionId,
       stickers: stickersByTeam[team.id] ?? [],
     }));
   }
@@ -90,6 +98,7 @@ export class SupabaseTeamRepository implements TeamRepository {
     return {
       id: team.id,
       name: team.name,
+      collectionId: team.collectionId,
       stickers: (stickers ?? []).map(this.mapSticker),
     };
   }

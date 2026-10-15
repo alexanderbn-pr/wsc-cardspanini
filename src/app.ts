@@ -51,6 +51,7 @@ import createTeamsRouter from "./infrastructure/http/routes/teams.js";
 import createPositionsRouter from "./infrastructure/http/routes/positions.js";
 import createEditionsRouter from "./infrastructure/http/routes/editions.js";
 import manageAuthRouter from "./infrastructure/http/routes/auth.js";
+import createCollectionRouter from "./infrastructure/http/routes/collection.js";
 
 import { AuthController } from "./infrastructure/http/controllers/auth.controller.js";
 const app = express();
@@ -109,6 +110,7 @@ const teamsRouter = createTeamsRouter(teamController, authService);
 const positionsRouter = createPositionsRouter(positionController, authService);
 const editionsRouter = createEditionsRouter(editionController, authService);
 const authRouter = manageAuthRouter(authController, authService);
+const collectionRouter = createCollectionRouter(authService);
 
 // -- ROUTES --
 app.use("/api", healthRouter);
@@ -116,6 +118,7 @@ app.use("/stickers", stickersRouter);
 app.use("/teams", teamsRouter);
 app.use("/positions", positionsRouter);
 app.use("/editions", editionsRouter);
+app.use("/collection", collectionRouter);
 app.use("/auth", authRouter);
 
 // Swagger UI and OpenAPI JSON

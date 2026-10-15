@@ -1,0 +1,7 @@
+model Collections {
+  id       Int       @id @default(autoincrement())
+  name     String
+  completed Boolean @default(false)
+
+  @@map("Collections")
+}

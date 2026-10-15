@@ -5,7 +5,10 @@ export class TeamController {
   constructor(private readonly teamService: TeamService) {}
 
   getAll = async (req: Request, res: Response) => {
-    const teams = await this.teamService.getAll();
+    const collectionId = req.query?.collectionId
+      ? Number(req.query.collectionId)
+      : undefined;
+    const teams = await this.teamService.getAll(collectionId);
     res.json(teams);
   };
 
