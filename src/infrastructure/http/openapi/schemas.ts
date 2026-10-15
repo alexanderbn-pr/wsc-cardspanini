@@ -35,6 +35,15 @@ export const PositionResponseSchema = z
   })
   .openapi("PositionResponse");
 
+// Collection response schema — lean, collections-only response.
+export const CollectionResponseSchema = z
+  .object({
+    id: z.coerce.number().int().positive(),
+    name: z.string(),
+    completed: z.boolean().optional(),
+  })
+  .openapi("CollectionResponse");
+
 // `description` y `abbreviation` son nullable en la DB real; `id` es int8 pero
 // el mapper lo entrega como Number, así que aquí se declara number.
 export const EditionResponseSchema = z

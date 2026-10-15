@@ -14,6 +14,7 @@ import {
   PositionResponseSchema,
   EditionResponseSchema,
   UserResponseSchema,
+  CollectionResponseSchema,
 } from "./schemas.js";
 
 const registry = new OpenAPIRegistry();
@@ -36,6 +37,14 @@ const TeamIdParam = registry.registerParameter(
 
 const StickerIdParam = registry.registerParameter(
   "StickerId",
+  z.number().openapi({
+    param: { name: "id", in: "path" },
+    example: 1,
+  }),
+);
+
+const CollectionIdParam = registry.registerParameter(
+  "CollectionId",
   z.number().openapi({
     param: { name: "id", in: "path" },
     example: 1,
@@ -118,6 +127,35 @@ registry.registerPath({
     },
     400: {
       description: "Invalid query parameters",
+      content: {
+        "application/json": {
+          schema: ErrorResponseSchema,
+        },
+      },
+    },
+  },
+});
+
+registry.registerPath({
+  method: "get",
+  path: "/collection/{id}",
+  summary: "Get collection by ID",
+  description: "Returns a collection by its ID",
+  request: {
+    params: z.object({ id: CollectionIdParam }),
+  },
+  security: [{ bearerAuth: [] }],
+  responses: {
+    200: {
+      description: "Collection found",
+      content: {
+        "application/json": {
+          schema: CollectionResponseSchema,
+        },
+      },
+    },
+    404: {
+      description: "Collection not found",
       content: {
         "application/json": {
           schema: ErrorResponseSchema,
@@ -328,6 +366,24 @@ registry.registerPath({
       content: {
         "application/json": {
           schema: PositionResponseSchema.array(),
+        },
+      },
+    },
+  },
+});
+
+registry.registerPath({
+  method: "get",
+  path: "/collection",
+  summary: "Get all collections",
+  description: "Returns all collections",
+  security: [{ bearerAuth: [] }],
+  responses: {
+    200: {
+      description: "Successful response",
+      content: {
+        "application/json": {
+          schema: CollectionResponseSchema.array(),
         },
       },
     },
