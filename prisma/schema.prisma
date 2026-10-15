@@ -31,6 +31,7 @@ datasource db {
 model Team {
   id       Int       @id @default(autoincrement())
   name     String
+  collectionId Int? // nullable, no default — links team to a collection
   stickers Sticker[]
 
   @@map("Teams")
@@ -78,4 +79,11 @@ model Edition {
   stickers     Sticker[]
 
   @@map("Edition")
+}
+model Collections {
+  id       Int       @id @default(autoincrement())
+  name     String
+  completed Boolean @default(false)
+
+  @@map("Collections")
 }

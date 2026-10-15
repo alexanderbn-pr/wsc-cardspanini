@@ -64,6 +64,7 @@ describe("StickerService", () => {
     teamService.getById.mockResolvedValue({
       id: 5,
       name: "Valencia CF",
+      collectionId: null,
       stickers: [],
     });
 

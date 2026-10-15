@@ -10,11 +10,12 @@ import pRetry from "p-retry";
  * Handles ONLY team operations.
  */
 export class PrismaTeamRepository implements TeamRepository {
-  async getAll(): Promise<Team[]> {
+  async getAll(collectionId?: number): Promise<Team[]> {
     const teams = await pRetry(
       () =>
         prisma.team.findMany({
           orderBy: { id: "asc" },
+          where: collectionId ? { collectionId: collectionId } : undefined,
           include: {
             stickers: { ...WITH_POSITION, orderBy: { id: "asc" } },
           },
@@ -25,6 +26,7 @@ export class PrismaTeamRepository implements TeamRepository {
     return teams.map((team) => ({
       id: team.id,
       name: team.name,
+      collectionId: team.collectionId,
       stickers: team.stickers.map(mapSticker),
     }));
   }
@@ -46,6 +48,7 @@ export class PrismaTeamRepository implements TeamRepository {
     return {
       id: team.id,
       name: team.name,
+      collectionId: team.collectionId,
       stickers: team.stickers.map(mapSticker),
     };
   }

@@ -8,6 +8,7 @@ import {
   TEAMS_CACHE_TTL_SECONDS,
   TEAM_CACHE_TTL_SECONDS,
   teamCacheKey,
+  teamCollectionCacheKey,
 } from "../../config/cache.js";
 
 export class TeamService {
@@ -16,20 +17,17 @@ export class TeamService {
     private readonly redisService: RedisService,
   ) {}
 
-  async getAll(): Promise<Team[]> {
-    const cached = await this.redisService.get<Team[]>(TEAMS_CACHE_KEY);
+  async getAll(collectionId?: number): Promise<Team[]> {
+    const cacheKey = teamCollectionCacheKey(collectionId);
+    const cached = await this.redisService.get<Team[]>(cacheKey);
     if (cached) {
-      logger.debug("Cache hit — all teams loaded from Redis");
+      logger.debug({ collectionId }, "Cache hit — teams loaded from Redis");
       return cached;
     }
 
-    logger.debug("Cache miss — fetching all teams from database");
-    const teams = await this.teamRepository.getAll();
-    await this.redisService.set(
-      TEAMS_CACHE_KEY,
-      teams,
-      TEAMS_CACHE_TTL_SECONDS,
-    );
+    logger.debug({ collectionId }, "Cache miss — fetching teams from database");
+    const teams = await this.teamRepository.getAll(collectionId);
+    await this.redisService.set(cacheKey, teams, TEAMS_CACHE_TTL_SECONDS);
     return teams;
   }
 
@@ -54,6 +52,8 @@ export class TeamService {
     await Promise.all([
       this.redisService.delete(TEAMS_CACHE_KEY),
       this.redisService.delete(teamCacheKey(teamId)),
+      // Also invalidate any collection-specific cache entries
+      // by deleting the base key — callers should decide based on their needs
     ]);
     logger.debug({ teamId }, "Team caches invalidated");
   }

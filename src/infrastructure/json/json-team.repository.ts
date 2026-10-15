@@ -37,7 +37,7 @@ export class JsonTeamRepository implements TeamRepository {
     this.teams = this.mapTeams();
   }
 
-  async getAll(): Promise<Team[]> {
+  async getAll(_collectionId?: number): Promise<Team[]> {
     return this.teams;
   }
 
@@ -55,6 +55,7 @@ export class JsonTeamRepository implements TeamRepository {
     return rawTeams.map((raw, index) => ({
       id: index + 1, // Derive ID from array position
       name: raw.name,
+      collectionId: null, // JSON source has no collection linkage
       stickers: raw.stickers.map(this.mapSticker),
     }));
   }
