@@ -1,4 +1,3 @@
-
 import { describe, expect, it } from "vitest";
 import { jwtVerify } from "jose";
 
@@ -11,6 +10,7 @@ import {
   TOKEN_ROLE,
   TOKEN_SUBJECT_ID,
   TOKEN_TTL,
+  ttlToSeconds,
 } from "./auth.js";
 
 loadEnv();
@@ -31,7 +31,7 @@ describe("createToken signing contract", () => {
     expect(payload.sub).toBe(String(TOKEN_SUBJECT_ID));
     expect(payload.role).toBe(TOKEN_ROLE);
     expect((payload.exp as number) - (payload.iat as number)).toBe(
-      Number.parseInt(TOKEN_TTL, 10) * 3600,
+      ttlToSeconds(TOKEN_TTL),
     );
   });
 
@@ -39,6 +39,21 @@ describe("createToken signing contract", () => {
     await expect(
       verifier().verifyAccessToken(await createToken()),
     ).resolves.toEqual({ id: TOKEN_SUBJECT_ID, role: TOKEN_ROLE });
+  });
+});
+
+describe("ttlToSeconds", () => {
+  it.each([
+    ["60s", 60],
+    ["12h", 43200],
+    ["24h", 86400],
+    ["7d", 604800],
+  ])("converts %s to %i seconds", (ttl, seconds) => {
+    expect(ttlToSeconds(ttl)).toBe(seconds);
+  });
+
+  it("rejects malformed values", () => {
+    expect(() => ttlToSeconds("banana")).toThrowError(/Unsupported TTL/);
   });
 });
 

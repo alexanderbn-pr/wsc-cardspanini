@@ -8,11 +8,12 @@ import {
   type Mocked,
 } from "vitest";
 import { AuthService } from "./auth.service.js";
-import { SignJWT } from "jose";
+import { SignJWT, jwtVerify } from "jose";
 
 import { AuthRepository } from "../../domain/repositories/auth.repository.js";
 import { User } from "../../domain/entities/User.js";
-import { loadEnv } from "../../config/env.js";
+import { loadEnv, getEnv } from "../../config/env.js";
+import { ttlToSeconds } from "../../tests/e2e/helpers/auth.js";
 import { AppError } from "../../infrastructure/http/middlewares/errorHandler/errorHandler.js";
 
 const JWT_SECRET = "test-jwt-secret-at-least-16-chars";
@@ -27,7 +28,7 @@ const signToken = (
   const jwt = new SignJWT(claims)
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
-    .setExpirationTime("1h");
+    .setExpirationTime(getEnv().JWT_EXPIRES_IN);
   return (subject === undefined ? jwt : jwt.setSubject(subject)).sign(
     encode(secret),
   );
@@ -235,6 +236,61 @@ describe("AuthService", () => {
         id: 7,
         role: "Admin",
       });
+    });
+
+    it("issues a token whose lifetime matches the configured TTL", async () => {
+      repository.findByEmail.mockResolvedValue(
+        await userWithPassword("s3cret"),
+      );
+
+      const { accessToken } = await service.login({
+        email: "portero@wsc.local",
+        password: "s3cret",
+      });
+
+      const { payload } = await jwtVerify(
+        accessToken,
+        new TextEncoder().encode(JWT_SECRET),
+        { algorithms: ["HS256"] },
+      );
+      const configuredTtl = getEnv().JWT_EXPIRES_IN;
+      // Guard de default: con JWT_EXPIRES_IN sin definir la sesión es 12h.
+      if (!process.env.JWT_EXPIRES_IN) {
+        expect(configuredTtl).toBe("12h");
+      }
+      expect((payload.exp as number) - (payload.iat as number)).toBe(
+        ttlToSeconds(configuredTtl),
+      );
+    });
+
+    it("honours a custom TTL (24h becomes 86400s)", async () => {
+      vi.resetModules();
+      process.env.JWT_EXPIRES_IN = "24h";
+      const { loadEnv: loadFreshEnv } = await import("../../config/env.js");
+      loadFreshEnv();
+      const { AuthService: FreshAuthService } =
+        await import("./auth.service.js");
+      const freshRepository = createMocks().repository;
+      freshRepository.findByEmail.mockResolvedValue(
+        await userWithPassword("s3cret"),
+      );
+      try {
+        const { accessToken } = await new FreshAuthService(
+          freshRepository,
+        ).login({
+          email: "portero@wsc.local",
+          password: "s3cret",
+        });
+
+        const { payload } = await jwtVerify(
+          accessToken,
+          new TextEncoder().encode(JWT_SECRET),
+          { algorithms: ["HS256"] },
+        );
+        expect((payload.exp as number) - (payload.iat as number)).toBe(86400);
+      } finally {
+        delete process.env.JWT_EXPIRES_IN;
+      }
     });
 
     it("throws a plain Error when the email is not registered", async () => {

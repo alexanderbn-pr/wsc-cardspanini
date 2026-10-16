@@ -20,6 +20,13 @@ const envSchema = z.object({
   SUPABASE_ANON_KEY: z.string().min(1),
   SUPABASE_SERVICE_ROLE_KEY: z.string().min(1).optional(),
   JWT_SECRET: z.string().min(16, "JWT_SECRET must be at least 16 characters"),
+  JWT_EXPIRES_IN: z
+    .string()
+    .regex(
+      /^\d+[smhd]$/,
+      'JWT_EXPIRES_IN must match "<number><s|m|h|d>" (e.g. "12h", "7d")',
+    )
+    .default("12h"),
   PORT: z.coerce.number().default(3000),
   NODE_ENV: z
     .enum(["development", "production", "test"])

@@ -8,6 +8,8 @@ import {
   FOREIGN_SECRET,
   TOKEN_ROLE,
   TOKEN_SUBJECT_ID,
+  TOKEN_TTL,
+  ttlToSeconds,
 } from "./helpers/auth.js";
 import {
   assertOnlyAllowedRequests,
@@ -170,7 +172,13 @@ describe("GET /teams E2E", () => {
     expect(protectedHeader.alg).toBe("HS256");
     expect(payload.sub).toBe(String(TOKEN_SUBJECT_ID));
     expect(payload.role).toBe(TOKEN_ROLE);
-    expect((payload.exp as number) - (payload.iat as number)).toBe(3600);
+    // Guard de default: con JWT_EXPIRES_IN sin definir la sesión es 12h.
+    if (!process.env.JWT_EXPIRES_IN) {
+      expect(ttlToSeconds(TOKEN_TTL)).toBe(43200);
+    }
+    expect((payload.exp as number) - (payload.iat as number)).toBe(
+      ttlToSeconds(TOKEN_TTL),
+    );
   });
 
   // ── Cobertura opcional ───────────────────────────────────────────────────

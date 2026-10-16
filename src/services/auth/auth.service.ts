@@ -56,7 +56,7 @@ export class AuthService {
     if (!passwordValid) {
       throw new Error("Invalid credentials");
     }
-    const { JWT_SECRET } = getEnv();
+    const { JWT_SECRET, JWT_EXPIRES_IN } = getEnv();
     const secret = new TextEncoder().encode(JWT_SECRET);
 
     const accessToken = await new SignJWT({
@@ -67,7 +67,7 @@ export class AuthService {
       })
       .setSubject(user.id.toString())
       .setIssuedAt()
-      .setExpirationTime("1h")
+      .setExpirationTime(JWT_EXPIRES_IN)
       .sign(secret);
 
     const { passwordHash, ...userWithoutPassword } = user;
