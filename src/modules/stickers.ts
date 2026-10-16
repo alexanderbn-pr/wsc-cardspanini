@@ -1,4 +1,5 @@
 export interface StickerFilters {
+  collectionId: number;
   id?: number;
   idTeam?: number;
   number?: string;

@@ -44,7 +44,9 @@ export class PrismaStickerRepository implements StickerRepository {
 
   async filterStickers(filters: StickerFilters): Promise<Sticker[]> {
     const skip = filters.page * filters.limit;
-    const where: Prisma.StickerWhereInput = {};
+    const where: Prisma.StickerWhereInput = {
+      team: { collectionId: filters.collectionId },
+    };
     if (filters.id !== undefined) where.id = filters.id;
     if (filters.idTeam !== undefined) where.idTeam = filters.idTeam;
     if (filters.number !== undefined) where.number = filters.number;

@@ -64,7 +64,10 @@ export class SupabaseStickerRepository implements StickerRepository {
   }
 
   async filterStickers(filters: StickerFilters): Promise<Sticker[]> {
-    let query = this.client.from("Stickers").select("*, Position(name)");
+    let query = this.client
+      .from("Stickers")
+      .select("*, Position(name), Team!inner(collectionId)")
+      .eq("Team.collectionId", filters.collectionId);
 
     if (filters.id !== undefined) query = query.eq("id", filters.id);
     if (filters.idTeam !== undefined)

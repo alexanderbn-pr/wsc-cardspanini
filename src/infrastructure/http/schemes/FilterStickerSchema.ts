@@ -4,10 +4,8 @@ import "../openapi/zod-extend.js";
 
 export const stickerFiltersSchema = z
   .object({
+    collectionId: z.coerce.number().int().positive().openapi({ example: 2 }),
     id: z.coerce.number().int().positive().optional().openapi({ example: 1 }),
-    // `teamId` es el nombre canónico; `idTeam` se mantiene como alias
-    // retrocompatible con el nombre del campo en la BD. Antes de este cambio
-    // `?teamId=` se descartaba en silencio (Zod strip) y el filtro no aplicaba.
     teamId: z.coerce
       .number()
       .int()

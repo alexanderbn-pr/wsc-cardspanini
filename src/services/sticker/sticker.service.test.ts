@@ -4,6 +4,7 @@ import { TeamService } from "../team/team.service.js";
 
 import { StickerRepository } from "../../domain/repositories/sticker.repository.js";
 import { RedisService } from "../../infrastructure/redis/redis.service.js";
+import { getStickerFilterCacheKey } from "../../infrastructure/redis/redis.keys.js";
 import { Sticker } from "../../domain/entities/Sticker.js";
 import { StickerFilters } from "../../modules/stickers.js";
 import { AppError } from "../../infrastructure/http/middlewares/errorHandler/errorHandler.js";
@@ -55,6 +56,7 @@ describe("StickerService", () => {
   ];
 
   beforeEach(() => {
+    vi.clearAllMocks();
     const mocks = createMocks();
 
     redis = mocks.redis;
@@ -141,8 +143,13 @@ describe("StickerService", () => {
   });
 
   describe("filterStickers", () => {
-    const filters: StickerFilters = { idTeam: 5, page: 1, limit: 10 };
-    const filterKey = "stickers:filter:idTeam=5:limit=10:page=1";
+    const filters: StickerFilters = {
+      collectionId: 2,
+      idTeam: 5,
+      page: 1,
+      limit: 10,
+    };
+    const filterKey = "stickers:filter:2:idTeam=5:limit=10:page=1";
 
     it("returns filtered stickers from the cache without querying the repository", async () => {
       redis.get.mockResolvedValue(team);
@@ -176,6 +183,47 @@ describe("StickerService", () => {
 
       expect(result).toEqual([]);
       expect(redis.set).toHaveBeenCalledExactlyOnceWith(filterKey, [], 30);
+    });
+
+    it("scopes the cache key by collectionId value first", () => {
+      expect(
+        getStickerFilterCacheKey({
+          collectionId: 2,
+          idTeam: 5,
+          page: 1,
+          limit: 10,
+        }),
+      ).toBe("stickers:filter:2:idTeam=5:limit=10:page=1");
+      expect(
+        getStickerFilterCacheKey({
+          collectionId: 2,
+          idTeam: 5,
+          page: 1,
+          limit: 10,
+        }).startsWith("stickers:filter:2:"),
+      ).toBe(true);
+    });
+
+    it("misses the cache when identical filters target another collection", async () => {
+      redis.get.mockResolvedValue(null);
+      repository.filterStickers.mockResolvedValue(team);
+      const other = {
+        collectionId: 3,
+        idTeam: 5,
+        page: 1,
+        limit: 10,
+      } satisfies StickerFilters;
+      const otherKey = getStickerFilterCacheKey(other);
+
+      const result = await service.filterStickers(other);
+
+      expect(result).toEqual(team);
+      // Distinta coleccion => distinta key: nunca sirve datos de la
+      // coleccion 2 aunque el resto de filtros coincida.
+      expect(otherKey).not.toBe(filterKey);
+      expect(otherKey.startsWith("stickers:filter:3:")).toBe(true);
+      expect(redis.get).toHaveBeenCalledExactlyOnceWith(otherKey);
+      expect(repository.filterStickers).toHaveBeenCalledExactlyOnceWith(other);
     });
   });
 
