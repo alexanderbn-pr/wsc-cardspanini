@@ -432,6 +432,24 @@
           "edition": 1,
           "check": false,
           "quantity": 0
+        },
+        {
+          "id": 4437,
+          "number": "5BIS",
+          "name": "Hugo Rincón",
+          "position": "defensa",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4438,
+          "number": "12BIS",
+          "name": "Gerenabarrena",
+          "position": "medio",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
         }
       ]
     },
@@ -654,6 +672,15 @@
           "edition": 1,
           "check": false,
           "quantity": 0
+        },
+        {
+          "id": 4439,
+          "number": "6BIS",
+          "name": "Dani Martínez",
+          "position": "defensa",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
         }
       ]
     },
@@ -856,6 +883,15 @@
           "name": "Lamine Yamal",
           "position": "delantero",
           "edition": 1,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4440,
+          "number": "10BIS",
+          "name": "Xavi Espart",
+          "position": "defensa",
+          "edition": 4,
           "check": false,
           "quantity": 0
         }
@@ -1069,6 +1105,15 @@
           "name": "Abde",
           "position": "delantero",
           "edition": 1,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4441,
+          "number": "9BIS",
+          "name": "Junior",
+          "position": "defensa",
+          "edition": 4,
           "check": false,
           "quantity": 0
         }
@@ -1293,6 +1338,33 @@
           "edition": 1,
           "check": false,
           "quantity": 0
+        },
+        {
+          "id": 4442,
+          "number": "4BIS",
+          "name": "Bayindir",
+          "position": "portero",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4443,
+          "number": "14BIS",
+          "name": "Burcio",
+          "position": "medio",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4444,
+          "number": "15BIS",
+          "name": "Driouech",
+          "position": "delantero",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
         }
       ]
     },
@@ -1506,6 +1578,15 @@
           "edition": 1,
           "check": false,
           "quantity": 0
+        },
+        {
+          "id": 4445,
+          "number": "14BIS",
+          "name": "Casadó",
+          "position": "medio",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
         }
       ]
     },
@@ -1708,6 +1789,33 @@
           "name": "Yago Santiago",
           "position": "delantero",
           "edition": 1,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4446,
+          "number": "5BIS",
+          "name": "Rubén Sánchez",
+          "position": "defensa",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4447,
+          "number": "8BIS",
+          "name": "Revivo",
+          "position": "defensa",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4448,
+          "number": "15BIS",
+          "name": "Lemar",
+          "position": "medio",
+          "edition": 4,
           "check": false,
           "quantity": 0
         }
@@ -2118,6 +2226,24 @@
           "edition": 1,
           "check": false,
           "quantity": 0
+        },
+        {
+          "id": 4449,
+          "number": "12BIS",
+          "name": "Uche",
+          "position": "delantero",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4450,
+          "number": "17BIS",
+          "name": "Iván Azón",
+          "position": "delantero",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
         }
       ]
     },
@@ -2338,6 +2464,24 @@
           "name": "Musuayi",
           "position": "delantero",
           "edition": 2,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4451,
+          "number": "10BIS",
+          "name": "Ndukwe",
+          "position": "defensa",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4452,
+          "number": "15BIS",
+          "name": "Ratkov",
+          "position": "delantero",
+          "edition": 4,
           "check": false,
           "quantity": 0
         }
@@ -2571,6 +2715,15 @@
           "edition": 1,
           "check": false,
           "quantity": 0
+        },
+        {
+          "id": 4453,
+          "number": "18BIS",
+          "name": "Endrick",
+          "position": "delantero",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
         }
       ]
     },
@@ -2773,6 +2926,24 @@
           "name": "Chupe",
           "position": "delantero",
           "edition": 1,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4454,
+          "number": "8BIS",
+          "name": "Berrocal",
+          "position": "defensa",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4455,
+          "number": "15BIS",
+          "name": "Cajuste",
+          "position": "medio",
+          "edition": 4,
           "check": false,
           "quantity": 0
         }
@@ -2986,6 +3157,24 @@
           "name": "Budimir",
           "position": "delantero",
           "edition": 1,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4456,
+          "number": "7BIS",
+          "name": "Yeboah",
+          "position": "defensa",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4457,
+          "number": "9BIS",
+          "name": "Diego Rico",
+          "position": "defensa",
+          "edition": 4,
           "check": false,
           "quantity": 0
         }
@@ -3219,6 +3408,42 @@
           "edition": 1,
           "check": false,
           "quantity": 0
+        },
+        {
+          "id": 4458,
+          "number": "10BIS",
+          "name": "Aarón Martín",
+          "position": "defensa",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4459,
+          "number": "12BIS",
+          "name": "Prati",
+          "position": "medio",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4460,
+          "number": "14BIS",
+          "name": "André Almeida",
+          "position": "medio",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4461,
+          "number": "19BIS",
+          "name": "Iker Luque",
+          "position": "delantero",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
         }
       ]
     },
@@ -3432,6 +3657,33 @@
           "edition": 1,
           "check": false,
           "quantity": 0
+        },
+        {
+          "id": 4462,
+          "number": "4BIS",
+          "name": "Audero",
+          "position": "portero",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4463,
+          "number": "12BIS",
+          "name": "Bouare",
+          "position": "medio",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4464,
+          "number": "17BIS",
+          "name": "Tsitaishvili",
+          "position": "delantero",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
         }
       ]
     },
@@ -3625,6 +3877,15 @@
           "name": "Oyarzabal",
           "position": "delantero",
           "edition": 1,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4465,
+          "number": "15BIS",
+          "name": "Ochieng",
+          "position": "delantero",
+          "edition": 4,
           "check": false,
           "quantity": 0
         }
@@ -3849,6 +4110,33 @@
           "edition": 1,
           "check": false,
           "quantity": 0
+        },
+        {
+          "id": 4466,
+          "number": "11BIS",
+          "name": "Fofana",
+          "position": "medio",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4467,
+          "number": "14BIS",
+          "name": "Nico Guillén",
+          "position": "medio",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4468,
+          "number": "16BIS",
+          "name": "Alfon",
+          "position": "delantero",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
         }
       ]
     },
@@ -4071,6 +4359,33 @@
           "edition": 1,
           "check": false,
           "quantity": 0
+        },
+        {
+          "id": 4469,
+          "number": "2BIS",
+          "name": "Javier Aguirre",
+          "position": "entrenador",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4470,
+          "number": "4BIS",
+          "name": "Van Oevelen",
+          "position": "portero",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4471,
+          "number": "18BIS",
+          "name": "Otorbi",
+          "position": "delantero",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
         }
       ]
     },
@@ -4291,6 +4606,24 @@
           "name": "Gerard Moreno",
           "position": "delantero",
           "edition": 1,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4472,
+          "number": "8BIS",
+          "name": "Diatta",
+          "position": "defensa",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4473,
+          "number": "16BIS",
+          "name": "Ilias",
+          "position": "delantero",
+          "edition": 4,
           "check": false,
           "quantity": 0
         }
@@ -4657,6 +4990,240 @@
           "name": "RODRI (Barcelona)",
           "position": "medio",
           "edition": 3,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4474,
+          "number": "UF41",
+          "name": "Ezequiel Ponce",
+          "position": "delantero",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4475,
+          "number": "UF42",
+          "name": "Gudelj",
+          "position": "medio",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4476,
+          "number": "UF43",
+          "name": "Sarr",
+          "position": "defensa",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4477,
+          "number": "UF44",
+          "name": "Miguel Rodríguez",
+          "position": "delantero",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4478,
+          "number": "UF45",
+          "name": "Pablo Martínez",
+          "position": "medio",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4479,
+          "number": "UF46",
+          "name": "Del Castillo",
+          "position": "delantero",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4480,
+          "number": "UF47",
+          "name": "Belocian",
+          "position": "defensa",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4481,
+          "number": "UF48",
+          "name": "Stassin",
+          "position": "delantero",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4482,
+          "number": "UF49",
+          "name": "Sadick",
+          "position": "defensa",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4483,
+          "number": "UF50",
+          "name": "Bryan Zaragoza",
+          "position": "delantero",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4484,
+          "number": "UF51",
+          "name": "Saliba",
+          "position": "medio",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4485,
+          "number": "UF52",
+          "name": "Giménez",
+          "position": "defensa",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4486,
+          "number": "UF53",
+          "name": "Pedrosa",
+          "position": "defensa",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4487,
+          "number": "UF54",
+          "name": "Cáceres",
+          "position": "defensa",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4488,
+          "number": "UF55",
+          "name": "Livakovic",
+          "position": "portero",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4489,
+          "number": "UF56",
+          "name": "Pablo García",
+          "position": "delantero",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4490,
+          "number": "UF57",
+          "name": "Arnau",
+          "position": "defensa",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4491,
+          "number": "UF58",
+          "name": "Osorio",
+          "position": "delantero",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4492,
+          "number": "UF59",
+          "name": "Héctor Fort",
+          "position": "defensa",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4493,
+          "number": "UF60",
+          "name": "Romero",
+          "position": "defensa",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4494,
+          "number": "UF61",
+          "name": "Félix Correia",
+          "position": "delantero",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4495,
+          "number": "UF62",
+          "name": "Adama Traoré",
+          "position": "delantero",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4496,
+          "number": "UF63",
+          "name": "Gabriel Jesus",
+          "position": "delantero",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4497,
+          "number": "UF64",
+          "name": "Elliott",
+          "position": "medio",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4498,
+          "number": "UF65",
+          "name": "Dani Ceballos",
+          "position": "medio",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4499,
+          "number": "UF66",
+          "name": "Jonathan David",
+          "position": "delantero",
+          "edition": 4,
           "check": false,
           "quantity": 0
         }
@@ -5311,6 +5878,783 @@
           "name": "Yeremay (Deportivo)",
           "position": "delantero",
           "edition": 1,
+          "check": false,
+          "quantity": 0
+        }
+      ]
+    },
+    {
+      "id": 26,
+      "name": "3 TOP FICHAJES",
+      "stickers": [
+        {
+          "id": 4500,
+          "number": "67",
+          "name": "Rodri",
+          "position": "medio",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4501,
+          "number": "68",
+          "name": "Cucurella",
+          "position": "defensa",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4502,
+          "number": "69",
+          "name": "Kang-in Lee",
+          "position": "medio",
+          "edition": 4,
+          "check": false,
+          "quantity": 0
+        }
+      ]
+    },
+    {
+      "id": 102,
+      "name": "ESCUDOS (chicles)",
+      "stickers": [
+        {
+          "id": 4503,
+          "number": "1",
+          "name": "D. Alavés",
+          "position": "escudo",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4504,
+          "number": "2",
+          "name": "Athletic Club",
+          "position": "escudo",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4505,
+          "number": "3",
+          "name": "Atlético de Madrid",
+          "position": "escudo",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4506,
+          "number": "4",
+          "name": "FC Barcelona",
+          "position": "escudo",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4507,
+          "number": "5",
+          "name": "Real Betis",
+          "position": "escudo",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4508,
+          "number": "6",
+          "name": "RC Celta",
+          "position": "escudo",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4509,
+          "number": "7",
+          "name": "RC Deportivo",
+          "position": "escudo",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4510,
+          "number": "8",
+          "name": "Elche CF",
+          "position": "escudo",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4511,
+          "number": "9",
+          "name": "RCD Espanyol",
+          "position": "escudo",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4512,
+          "number": "10",
+          "name": "Getafe CF",
+          "position": "escudo",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4513,
+          "number": "11",
+          "name": "Levante UD",
+          "position": "escudo",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4514,
+          "number": "12",
+          "name": "Real Madrid",
+          "position": "escudo",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4515,
+          "number": "13",
+          "name": "Málaga CF",
+          "position": "escudo",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4516,
+          "number": "14",
+          "name": "CA Osasuna",
+          "position": "escudo",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4517,
+          "number": "15",
+          "name": "R. Racing Club",
+          "position": "escudo",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4518,
+          "number": "16",
+          "name": "Rayo Vallecano",
+          "position": "escudo",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4519,
+          "number": "17",
+          "name": "Real Sociedad",
+          "position": "escudo",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4520,
+          "number": "18",
+          "name": "Sevilla FC",
+          "position": "escudo",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4521,
+          "number": "19",
+          "name": "Valencia CF",
+          "position": "escudo",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4522,
+          "number": "20",
+          "name": "Villarreal CF",
+          "position": "escudo",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        }
+      ]
+    },
+    {
+      "id": 103,
+      "name": "MASTERCLASS (chicles)",
+      "stickers": [
+        {
+          "id": 4523,
+          "number": "1",
+          "name": "Boyé",
+          "position": "D. Alavés",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4524,
+          "number": "2",
+          "name": "Nico Williams",
+          "position": "Athletic Club",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4525,
+          "number": "3",
+          "name": "Lookman",
+          "position": "Atlético de Madrid",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4526,
+          "number": "4",
+          "name": "Lamine Yamal",
+          "position": "FC Barcelona",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4527,
+          "number": "5",
+          "name": "Antony",
+          "position": "Real Betis",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4528,
+          "number": "6",
+          "name": "Borja Iglesias",
+          "position": "RC Celta",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4529,
+          "number": "7",
+          "name": "Yeremay",
+          "position": "RC Deportivo",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4530,
+          "number": "8",
+          "name": "Álvaro Rodríguez",
+          "position": "Elche CF",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4531,
+          "number": "9",
+          "name": "Puado",
+          "position": "RCD Espanyol",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4532,
+          "number": "10",
+          "name": "Satriano",
+          "position": "Getafe CF",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4533,
+          "number": "11",
+          "name": "Carlos Álvarez",
+          "position": "Levante UD",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4534,
+          "number": "12",
+          "name": "Mbappé",
+          "position": "Real Madrid",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4535,
+          "number": "13",
+          "name": "Chupe",
+          "position": "Málaga CF",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4536,
+          "number": "14",
+          "name": "Budimir",
+          "position": "CA Osasuna",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4537,
+          "number": "15",
+          "name": "Andrés Martín",
+          "position": "R. Racing Club",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4538,
+          "number": "16",
+          "name": "De Frutos",
+          "position": "Rayo Vallecano",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4539,
+          "number": "17",
+          "name": "Guedes",
+          "position": "Real Sociedad",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4540,
+          "number": "18",
+          "name": "Akor Adams",
+          "position": "Sevilla FC",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4541,
+          "number": "19",
+          "name": "Hugo Duro",
+          "position": "Valencia CF",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4542,
+          "number": "20",
+          "name": "Moleiro",
+          "position": "Villarreal CF",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        }
+      ]
+    },
+    {
+      "id": 104,
+      "name": "BOX TO BOX (chicles)",
+      "stickers": [
+        {
+          "id": 4543,
+          "number": "1",
+          "name": "Blanco",
+          "position": "D. Alavés",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4544,
+          "number": "2",
+          "name": "Jauregizar",
+          "position": "Athletic Club",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4545,
+          "number": "3",
+          "name": "Barrios",
+          "position": "Atlético de Madrid",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4546,
+          "number": "4",
+          "name": "Pedri",
+          "position": "FC Barcelona",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4547,
+          "number": "5",
+          "name": "Pablo Fornals",
+          "position": "Real Betis",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4548,
+          "number": "6",
+          "name": "Miguel Román",
+          "position": "RC Celta",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4549,
+          "number": "7",
+          "name": "Mario Soriano",
+          "position": "RC Deportivo",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4550,
+          "number": "8",
+          "name": "Marc Aguado",
+          "position": "Elche CF",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4551,
+          "number": "9",
+          "name": "Edu Expósito",
+          "position": "RCD Espanyol",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4552,
+          "number": "10",
+          "name": "Mario Martín",
+          "position": "Getafe CF",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4553,
+          "number": "11",
+          "name": "Olasagasti",
+          "position": "Levante UD",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4554,
+          "number": "12",
+          "name": "Fede Valverde",
+          "position": "Real Madrid",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4555,
+          "number": "13",
+          "name": "Dani Lorenzo",
+          "position": "Málaga CF",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4556,
+          "number": "14",
+          "name": "Moncayola",
+          "position": "CA Osasuna",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4557,
+          "number": "15",
+          "name": "Gustavo Puerta",
+          "position": "R. Racing Club",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4558,
+          "number": "16",
+          "name": "Óscar Valentín",
+          "position": "Rayo Vallecano",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4559,
+          "number": "17",
+          "name": "Carlos Soler",
+          "position": "Real Sociedad",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4560,
+          "number": "18",
+          "name": "Sow",
+          "position": "Sevilla FC",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4561,
+          "number": "19",
+          "name": "Pepelu",
+          "position": "Valencia CF",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4562,
+          "number": "20",
+          "name": "Pape Gueye",
+          "position": "Villarreal CF",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        }
+      ]
+    },
+    {
+      "id": 105,
+      "name": "¿QUIEN ES? (chicles)",
+      "stickers": [
+        {
+          "id": 4563,
+          "number": "1",
+          "name": "Toni Martínez",
+          "position": "D. Alavés",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4564,
+          "number": "2",
+          "name": "Vivian",
+          "position": "Athletic Club",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4565,
+          "number": "3",
+          "name": "Hancko",
+          "position": "Atlético de Madrid",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4566,
+          "number": "4",
+          "name": "Eric García",
+          "position": "FC Barcelona",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4567,
+          "number": "5",
+          "name": "Aitor Rubial",
+          "position": "Real Betis",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4568,
+          "number": "6",
+          "name": "Sergio Carreira",
+          "position": "RC Celta",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4569,
+          "number": "7",
+          "name": "D. Villares",
+          "position": "RC Deportivo",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4570,
+          "number": "8",
+          "name": "Bigas",
+          "position": "Elche CF",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4571,
+          "number": "9",
+          "name": "Cabrera",
+          "position": "RCD Espanyol",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4572,
+          "number": "10",
+          "name": "Davinchi",
+          "position": "Getafe CF",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4573,
+          "number": "11",
+          "name": "Carlos Espí",
+          "position": "Levante UD",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4574,
+          "number": "12",
+          "name": "Güler",
+          "position": "Real Madrid",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4575,
+          "number": "13",
+          "name": "Herrero",
+          "position": "Málaga CF",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4576,
+          "number": "14",
+          "name": "Rubén García",
+          "position": "CA Osasuna",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4577,
+          "number": "15",
+          "name": "Ezkieta",
+          "position": "R. Racing Club",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4578,
+          "number": "16",
+          "name": "Isi",
+          "position": "Rayo Vallecano",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4579,
+          "number": "17",
+          "name": "Oyarzabal",
+          "position": "Real Sociedad",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4580,
+          "number": "18",
+          "name": "Suazo",
+          "position": "Sevilla FC",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4581,
+          "number": "19",
+          "name": "Gayà",
+          "position": "Valencia CF",
+          "edition": 6,
+          "check": false,
+          "quantity": 0
+        },
+        {
+          "id": 4582,
+          "number": "20",
+          "name": "Gerard García",
+          "position": "Villarreal CF",
+          "edition": 6,
           "check": false,
           "quantity": 0
         }
